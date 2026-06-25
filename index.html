@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>طلای تاج | مرجع قیمت روز طلا و جواهر</title>
+  <meta name="description" content="طلای تاج - مرجع قیمت روز طلا، سکه و ارز. خرید طلا و جواهر با ضمانت اصالت. مشاوره تخصصی خرید طلا. تماس: ۰۹۱۷۳۹۵۷۴۳۶" />
+  <meta name="keywords" content="قیمت طلا, خرید طلا, قیمت سکه, طلای ۱۸ عیار, طلای ۲۴ عیار, جواهرات" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="طلای تاج | مرجع قیمت روز طلا" />
+  <meta property="og:description" content="اصالت، زیبایی و سرمایه‌گذاری مطمئن. مرجع قیمت روز طلا و جواهرات لوکس." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fa_IR" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="طلای تاج" />
+  <meta name="twitter:description" content="مرجع قیمت روز طلا و جواهرات لوکس" />
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "JewelryStore",
+    "name": "طلای تاج",
+    "telephone": "+989173957436",
+    "url": "https://tajgold.ir",
+    "description": "فروشگاه طلا و جواهر تاج - مرجع قیمت روز طلا و جواهرات لوکس",
+    "openingHours": "Sa-Th 09:00-21:00",
+    "priceRange": "$$$$",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+989173957436",
+      "contactType": "customer service"
+    }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "چگونه از اصالت طلا مطمئن شوم؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "تمام محصولات طلای تاج دارای فاکتور رسمی و مهر عیارسنجی هستند."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "اجرت ساخت طلا چقدر است؟",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "اجرت ساخت بستگی به نوع مصنوع و پیچیدگی طراحی دارد و بین ۵ تا ۲۰ درصد متغیر است."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- AOS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header id="header">
+  <div class="header-inner">
+    <a href="#home" class="logo">
+      <span class="logo-icon"><i class="fas fa-crown"></i></span>
+      <div class="logo-text">
+        <span class="logo-main">طلای تاج</span>
+        <span class="logo-sub">GOLD & JEWELRY</span>
+      </div>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#home">خانه</a>
+      <a href="#prices">قیمت روز طلا</a>
+      <a href="#products">محصولات</a>
+      <a href="#calculator">ماشین حساب</a>
+      <a href="#blog">مقالات</a>
+      <a href="#contact">تماس با ما</a>
+    </nav>
+
+    <div class="header-actions">
+      <a href="tel:09173957436" class="btn-header btn-call">
+        <i class="fas fa-phone"></i>
+        <span>تماس مستقیم</span>
+      </a>
+      <a href="https://wa.me/989173957436" target="_blank" class="btn-header btn-whatsapp">
+        <i class="fab fa-whatsapp"></i>
+        <span>واتساپ</span>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="منو">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section id="home" class="hero">
+  <div class="hero-bg">
+    <div class="hero-overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge" data-aos="fade-down" data-aos-delay="200">
+      <i class="fas fa-crown"></i>
+      <span>برند لوکس ایرانی</span>
+    </div>
+    <h1 class="hero-title" data-aos="fade-up" data-aos-delay="400">
+      <span class="gold-text">طلای تاج</span>
+    </h1>
+    <p class="hero-sub" data-aos="fade-up" data-aos-delay="600">
+      اصالت، زیبایی و سرمایه‌گذاری مطمئن
+    </p>
+    <p class="hero-desc" data-aos="fade-up" data-aos-delay="800">
+      مرجع قیمت روز طلا، معرفی مصنوعات طلا و جواهر و مشاوره تخصصی خرید
+    </p>
+    <div class="hero-btns" data-aos="fade-up" data-aos-delay="1000">
+      <a href="tel:09173957436" class="btn-primary">
+        <i class="fas fa-phone"></i>
+        تماس با کارشناسان
+      </a>
+      <a href="#prices" class="btn-secondary">
+        <i class="fas fa-chart-line"></i>
+        مشاهده قیمت روز
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>پایین بکشید</span>
+  </div>
+
+  <!-- Floating jewelry shapes -->
+  <div class="hero-shape shape-1"></div>
+  <div class="hero-shape shape-2"></div>
+  <div class="hero-shape shape-3"></div>
+</section>
+
+<!-- ===== TICKER ===== -->
+<div class="price-ticker">
+  <div class="ticker-label"><i class="fas fa-bolt"></i> لحظه‌ای</div>
+  <div class="ticker-track" id="tickerTrack">
+    <div class="ticker-item"><span class="ti-name">طلای ۱۸ عیار</span><span class="ti-price" id="t18">در حال بارگذاری...</span></div>
+    <div class="ticker-item"><span class="ti-name">طلای ۲۴ عیار</span><span class="ti-price" id="t24">—</span></div>
+    <div class="ticker-item"><span class="ti-name">مثقال طلا</span><span class="ti-price" id="tmis">—</span></div>
+    <div class="ticker-item"><span class="ti-name">سکه امامی</span><span class="ti-price" id="tsek">—</span></div>
+    <div class="ticker-item"><span class="ti-name">دلار</span><span class="ti-price" id="tusd">—</span></div>
+    <div class="ticker-item"><span class="ti-name">یورو</span><span class="ti-price" id="teur">—</span></div>
+    <div class="ticker-item"><span class="ti-name">اونس جهانی</span><span class="ti-price" id="toz">—</span></div>
+  </div>
+</div>
+
+<!-- ===== LIVE PRICES ===== -->
+<section id="prices" class="section prices-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-circle-dot"></i> زنده</span>
+      <h2 class="section-title">قیمت روز طلا و ارز</h2>
+      <p class="section-desc">قیمت‌ها به صورت خودکار هر ۶۰ ثانیه به‌روزرسانی می‌شوند</p>
+      <div class="update-info">
+        <i class="fas fa-sync-alt" id="syncIcon"></i>
+        <span>آخرین به‌روزرسانی: <strong id="lastUpdate">—</strong></span>
+      </div>
+    </div>
+
+    <!-- Gold Prices -->
+    <div class="price-group" data-aos="fade-up" data-aos-delay="100">
+      <h3 class="price-group-title"><i class="fas fa-coins"></i> طلا</h3>
+      <div class="price-grid" id="goldPriceGrid">
+        <div class="price-card" data-item="gold18">
+          <div class="pc-icon"><i class="fas fa-ring"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">طلای ۱۸ عیار</div>
+            <div class="pc-sub">هر گرم</div>
+            <div class="pc-price" id="p18">—</div>
+            <div class="pc-change" id="c18"><span>—</span></div>
+          </div>
+          <div class="pc-badge">گرم</div>
+        </div>
+        <div class="price-card" data-item="gold24">
+          <div class="pc-icon"><i class="fas fa-gem"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">طلای ۲۴ عیار</div>
+            <div class="pc-sub">هر گرم</div>
+            <div class="pc-price" id="p24">—</div>
+            <div class="pc-change" id="c24"><span>—</span></div>
+          </div>
+          <div class="pc-badge">گرم</div>
+        </div>
+        <div class="price-card featured" data-item="misqal">
+          <div class="pc-icon"><i class="fas fa-scale-balanced"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">مثقال طلا</div>
+            <div class="pc-sub">هر مثقال</div>
+            <div class="pc-price" id="pmis">—</div>
+            <div class="pc-change" id="cmis"><span>—</span></div>
+          </div>
+          <div class="pc-badge">مثقال</div>
+        </div>
+        <div class="price-card" data-item="ounce">
+          <div class="pc-icon"><i class="fas fa-globe"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">اونس جهانی</div>
+            <div class="pc-sub">دلار</div>
+            <div class="pc-price" id="poz">—</div>
+            <div class="pc-change" id="coz"><span>—</span></div>
+          </div>
+          <div class="pc-badge">USD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coin Prices -->
+    <div class="price-group" data-aos="fade-up" data-aos-delay="200">
+      <h3 class="price-group-title"><i class="fas fa-circle-dollar-to-slot"></i> سکه</h3>
+      <div class="price-grid">
+        <div class="price-card" data-item="emami">
+          <div class="pc-icon"><i class="fas fa-medal"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">سکه امامی</div>
+            <div class="pc-sub">تمام سکه</div>
+            <div class="pc-price" id="psek">—</div>
+            <div class="pc-change" id="csek"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+        <div class="price-card" data-item="nim">
+          <div class="pc-icon"><i class="fas fa-medal"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">نیم سکه</div>
+            <div class="pc-sub">نیم</div>
+            <div class="pc-price" id="pnim">—</div>
+            <div class="pc-change" id="cnim"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+        <div class="price-card" data-item="rob">
+          <div class="pc-icon"><i class="fas fa-medal"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">ربع سکه</div>
+            <div class="pc-sub">ربع</div>
+            <div class="pc-price" id="prob">—</div>
+            <div class="pc-change" id="crob"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+        <div class="price-card" data-item="gerami">
+          <div class="pc-icon"><i class="fas fa-medal"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">سکه گرمی</div>
+            <div class="pc-sub">گرمی</div>
+            <div class="pc-price" id="pger">—</div>
+            <div class="pc-change" id="cger"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Currency Prices -->
+    <div class="price-group" data-aos="fade-up" data-aos-delay="300">
+      <h3 class="price-group-title"><i class="fas fa-money-bill-transfer"></i> ارز</h3>
+      <div class="price-grid">
+        <div class="price-card" data-item="usd">
+          <div class="pc-icon"><i class="fas fa-dollar-sign"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">دلار آمریکا</div>
+            <div class="pc-sub">USD</div>
+            <div class="pc-price" id="pusd">—</div>
+            <div class="pc-change" id="cusd"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+        <div class="price-card" data-item="eur">
+          <div class="pc-icon"><i class="fas fa-euro-sign"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">یورو</div>
+            <div class="pc-sub">EUR</div>
+            <div class="pc-price" id="peur">—</div>
+            <div class="pc-change" id="ceur"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+        <div class="price-card" data-item="usdt">
+          <div class="pc-icon"><i class="fas fa-t"></i></div>
+          <div class="pc-body">
+            <div class="pc-name">تتر</div>
+            <div class="pc-sub">USDT</div>
+            <div class="pc-price" id="pusdt">—</div>
+            <div class="pc-change" id="cusdt"><span>—</span></div>
+          </div>
+          <div class="pc-badge">تومان</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-section" data-aos="fade-up" data-aos-delay="100">
+      <div class="chart-header">
+        <h3><i class="fas fa-chart-area"></i> نمودار قیمت طلای ۱۸ عیار</h3>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-period="1">امروز</button>
+          <button class="chart-tab" data-period="7">۷ روز</button>
+          <button class="chart-tab" data-period="30">۳۰ روز</button>
+          <button class="chart-tab" data-period="90">۹۰ روز</button>
+          <button class="chart-tab" data-period="365">۱ سال</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="goldChart"></canvas>
+      </div>
+    </div>
+
+    <div class="prices-cta" data-aos="fade-up">
+      <p>برای مشاوره تخصصی خرید طلا با کارشناسان ما تماس بگیرید</p>
+      <div class="cta-buttons">
+        <a href="tel:09173957436" class="btn-primary"><i class="fas fa-phone"></i> تماس فوری</a>
+        <a href="https://wa.me/989173957436" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> واتساپ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CALCULATOR ===== -->
+<section id="calculator" class="section calc-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-calculator"></i> ابزار</span>
+      <h2 class="section-title">ماشین حساب طلا</h2>
+      <p class="section-desc">محاسبه دقیق قیمت خرید، فروش و سرمایه‌گذاری طلا</p>
+    </div>
+
+    <div class="calc-tabs" data-aos="fade-up" data-aos-delay="100">
+      <button class="ctab active" data-calc="buy"><i class="fas fa-shopping-bag"></i> فاکتور خرید</button>
+      <button class="ctab" data-calc="sell"><i class="fas fa-hand-holding-dollar"></i> طلای دست دوم</button>
+      <button class="ctab" data-calc="invest"><i class="fas fa-chart-line"></i> سرمایه‌گذاری</button>
+    </div>
+
+    <!-- Buy Calculator -->
+    <div class="calc-panel active" id="calc-buy" data-aos="fade-up" data-aos-delay="200">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <h3 class="calc-sub">اطلاعات محصول</h3>
+          <div class="form-group">
+            <label><i class="fas fa-weight-hanging"></i> وزن (گرم)</label>
+            <input type="number" id="bWeight" placeholder="مثال: ۵.۵" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-coins"></i> قیمت طلا (تومان/گرم)</label>
+            <input type="number" id="bGoldPrice" placeholder="از بخش قیمت‌ها" min="0" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-hammer"></i> اجرت ساخت (%)</label>
+            <input type="number" id="bCraft" placeholder="مثال: ۱۵" min="0" max="100" value="15" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-percent"></i> سود فروشنده (%)</label>
+            <input type="number" id="bProfit" placeholder="مثال: ۷" min="0" max="100" value="7" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-file-invoice"></i> مالیات (%)</label>
+            <input type="number" id="bTax" placeholder="مثال: ۹" min="0" max="100" value="9" />
+          </div>
+          <button class="btn-calc" onclick="calcBuy()"><i class="fas fa-calculator"></i> محاسبه</button>
+        </div>
+
+        <div class="calc-result" id="buyResult">
+          <div class="result-placeholder">
+            <i class="fas fa-calculator"></i>
+            <p>اطلاعات را وارد کنید و محاسبه را بزنید</p>
+          </div>
+          <div class="result-content" id="buyResultContent" style="display:none;">
+            <h3>فاکتور محاسبه</h3>
+            <div class="result-rows">
+              <div class="result-row"><span>ارزش خالص طلا</span><strong id="r-gold">—</strong></div>
+              <div class="result-row"><span>اجرت ساخت</span><strong id="r-craft">—</strong></div>
+              <div class="result-row"><span>سود فروشنده</span><strong id="r-profit">—</strong></div>
+              <div class="result-row"><span>مالیات</span><strong id="r-tax">—</strong></div>
+              <div class="result-row total"><span>قیمت نهایی</span><strong id="r-total">—</strong></div>
+            </div>
+            <div class="result-actions">
+              <button class="btn-print" onclick="printInvoice()"><i class="fas fa-print"></i> چاپ فاکتور</button>
+              <a class="btn-share" id="shareWa" href="#" target="_blank"><i class="fab fa-whatsapp"></i> ارسال واتساپ</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sell / Second-hand Calculator -->
+    <div class="calc-panel" id="calc-sell">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <h3 class="calc-sub">اطلاعات طلای دست دوم</h3>
+          <div class="form-group">
+            <label><i class="fas fa-weight-hanging"></i> وزن (گرم)</label>
+            <input type="number" id="sWeight" placeholder="مثال: ۱۰" min="0" step="0.01" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-coins"></i> قیمت روز طلا (تومان/گرم)</label>
+            <input type="number" id="sGoldPrice" placeholder="از بخش قیمت‌ها" min="0" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-star-half-stroke"></i> عیار</label>
+            <select id="sPurity">
+              <option value="0.75">۱۸ عیار (۷۵۰)</option>
+              <option value="1">۲۴ عیار (۹۹۹)</option>
+              <option value="0.583">۱۴ عیار (۵۸۳)</option>
+              <option value="0.916">۲۲ عیار (۹۱۶)</option>
+            </select>
+          </div>
+          <button class="btn-calc" onclick="calcSell()"><i class="fas fa-calculator"></i> محاسبه</button>
+        </div>
+        <div class="calc-result" id="sellResult">
+          <div class="result-placeholder">
+            <i class="fas fa-calculator"></i>
+            <p>اطلاعات را وارد کنید</p>
+          </div>
+          <div class="result-content" id="sellResultContent" style="display:none;">
+            <h3>ارزیابی قیمت</h3>
+            <div class="result-rows">
+              <div class="result-row"><span>ارزش بازاری تخمینی</span><strong id="s-market">—</strong></div>
+              <div class="result-row total"><span>ارزش خرید تخمینی</span><strong id="s-buy">—</strong></div>
+            </div>
+            <p class="result-note"><i class="fas fa-info-circle"></i> قیمت نهایی پس از ارزیابی حضوری تعیین می‌شود</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Investment Calculator -->
+    <div class="calc-panel" id="calc-invest">
+      <div class="calc-grid">
+        <div class="calc-inputs">
+          <h3 class="calc-sub">محاسبه سود سرمایه‌گذاری</h3>
+          <div class="form-group">
+            <label><i class="fas fa-money-bill-wave"></i> مبلغ سرمایه‌گذاری (تومان)</label>
+            <input type="number" id="iAmount" placeholder="مثال: ۱۰۰۰۰۰۰۰۰" min="0" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-calendar-alt"></i> تاریخ خرید</label>
+            <input type="date" id="iDate" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-coins"></i> قیمت طلا هنگام خرید (تومان/گرم)</label>
+            <input type="number" id="iBuyPrice" placeholder="قیمت روز خرید" min="0" />
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-chart-line"></i> قیمت فعلی طلا (تومان/گرم)</label>
+            <input type="number" id="iCurrentPrice" placeholder="از بخش قیمت‌ها" min="0" />
+          </div>
+          <button class="btn-calc" onclick="calcInvest()"><i class="fas fa-calculator"></i> محاسبه سود</button>
+        </div>
+        <div class="calc-result" id="investResult">
+          <div class="result-placeholder">
+            <i class="fas fa-chart-pie"></i>
+            <p>اطلاعات را وارد کنید</p>
+          </div>
+          <div class="result-content" id="investResultContent" style="display:none;">
+            <h3>گزارش سرمایه‌گذاری</h3>
+            <div class="result-rows">
+              <div class="result-row"><span>ارزش فعلی</span><strong id="i-current">—</strong></div>
+              <div class="result-row"><span>مقدار سود/زیان</span><strong id="i-profit">—</strong></div>
+              <div class="result-row total"><span>درصد سود/زیان</span><strong id="i-pct">—</strong></div>
+            </div>
+            <div class="profit-visual" id="profitVisual"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRODUCTS ===== -->
+<section id="products" class="section products-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-gem"></i> مجموعه</span>
+      <h2 class="section-title">محصولات طلای تاج</h2>
+      <p class="section-desc">برترین مصنوعات طلا و جواهر با ضمانت اصالت و فاکتور رسمی</p>
+    </div>
+
+    <div class="product-cats" data-aos="fade-up" data-aos-delay="100">
+      <button class="pcat active" data-cat="all">همه</button>
+      <button class="pcat" data-cat="wedding">ست عروسی</button>
+      <button class="pcat" data-cat="ring">انگشتر</button>
+      <button class="pcat" data-cat="necklace">گردنبند</button>
+      <button class="pcat" data-cat="bracelet">دستبند</button>
+      <button class="pcat" data-cat="earring">گوشواره</button>
+      <button class="pcat" data-cat="coin">سکه</button>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+      <!-- Products injected by JS -->
+    </div>
+
+    <div class="products-cta" data-aos="fade-up">
+      <p>برای سفارش ویژه یا استعلام قیمت با ما در ارتباط باشید</p>
+      <div class="cta-buttons">
+        <a href="tel:09173957436" class="btn-primary"><i class="fas fa-phone"></i> تماس</a>
+        <a href="https://wa.me/989173957436" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> واتساپ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPECIAL ORDER ===== -->
+<section class="section order-section">
+  <div class="container">
+    <div class="order-inner" data-aos="fade-up">
+      <div class="order-content">
+        <span class="section-label"><i class="fas fa-wand-magic-sparkles"></i> سفارشی</span>
+        <h2>سفارش ساخت طلای اختصاصی</h2>
+        <p>طراحی و ساخت جواهرات سفارشی بر اساس ذوق و سلیقه شما با بهترین طلا و جواهر</p>
+        <ul class="order-features">
+          <li><i class="fas fa-check-circle"></i> طراحی کاملاً اختصاصی</li>
+          <li><i class="fas fa-check-circle"></i> مشاوره رایگان</li>
+          <li><i class="fas fa-check-circle"></i> ضمانت کیفیت</li>
+          <li><i class="fas fa-check-circle"></i> تحویل به موقع</li>
+        </ul>
+      </div>
+      <div class="order-form">
+        <h3>ثبت سفارش</h3>
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> نام</label>
+          <input type="text" id="oName" placeholder="نام و نام خانوادگی" />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> شماره تماس</label>
+          <input type="tel" id="oPhone" placeholder="۰۹۱۷۳۹۵۷۴۳۶" />
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-pen"></i> توضیحات</label>
+          <textarea id="oDesc" placeholder="توضیحات سفارش خود را بنویسید..." rows="4"></textarea>
+        </div>
+        <button class="btn-primary w100" onclick="submitOrder()">
+          <i class="fab fa-whatsapp"></i> ارسال سفارش در واتساپ
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHY TAJ ===== -->
+<section class="section why-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-shield-halved"></i> اعتماد</span>
+      <h2 class="section-title">چرا طلای تاج؟</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="why-icon"><i class="fas fa-certificate"></i></div>
+        <h3>ضمانت اصالت</h3>
+        <p>تمام محصولات با مهر عیارسنجی معتبر و فاکتور رسمی ارائه می‌شوند</p>
+      </div>
+      <div class="why-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="why-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <h3>فاکتور رسمی</h3>
+        <p>صدور فاکتور رسمی برای تمام خریدها جهت اطمینان مشتری</p>
+      </div>
+      <div class="why-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="why-icon"><i class="fas fa-eye"></i></div>
+        <h3>قیمت‌گذاری شفاف</h3>
+        <p>اجرت ساخت و سود فروشنده به صورت کاملاً شفاف اعلام می‌شود</p>
+      </div>
+      <div class="why-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="why-icon"><i class="fas fa-headset"></i></div>
+        <h3>مشاوره تخصصی</h3>
+        <p>کارشناسان متخصص آماده راهنمایی در انتخاب بهترین گزینه هستند</p>
+      </div>
+      <div class="why-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="why-icon"><i class="fas fa-palette"></i></div>
+        <h3>جدیدترین طرح‌ها</h3>
+        <p>بروزترین و زیباترین طرح‌های طلا و جواهر از بهترین طراحان</p>
+      </div>
+      <div class="why-card" data-aos="fade-up" data-aos-delay="350">
+        <div class="why-icon"><i class="fas fa-handshake"></i></div>
+        <h3>خدمات مطمئن</h3>
+        <p>سال‌ها تجربه در ارائه خدمات با کیفیت به مشتریان وفادار</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-num" data-target="15">۰</div>
+        <div class="stat-label">سال تجربه</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-num" data-target="5000">۰</div>
+        <div class="stat-label">مشتری راضی</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-num" data-target="500">۰</div>
+        <div class="stat-label">طرح منحصربه‌فرد</div>
+      </div>
+      <div class="stat-item" data-aos="fade-up" data-aos-delay="400">
+        <div class="stat-num" data-target="100">۰</div>
+        <div class="stat-label">درصد رضایت</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== REVIEWS ===== -->
+<section class="section reviews-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-star"></i> نظرات</span>
+      <h2 class="section-title">مشتریان ما می‌گویند</h2>
+    </div>
+    <div class="reviews-slider" id="reviewsSlider" data-aos="fade-up" data-aos-delay="100">
+      <div class="review-card">
+        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>«خرید انگشتر عروسی از طلای تاج یکی از بهترین تجربیاتم بود. کیفیت عالی و قیمت منصفانه.»</p>
+        <div class="review-author"><div class="review-avatar"><i class="fas fa-user-circle"></i></div><div><strong>سارا محمدی</strong><span>مشتری وفادار</span></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>«مشاوره تخصصی و قیمت‌گذاری شفاف. برای خرید سرمایه‌گذاری طلا بهترین گزینه.»</p>
+        <div class="review-author"><div class="review-avatar"><i class="fas fa-user-circle"></i></div><div><strong>علی احمدی</strong><span>سرمایه‌گذار</span></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+        <p>«ست عروسی بسیار زیبا و با کیفیت. تیم طلای تاج بسیار حرفه‌ای و صادقانه.»</p>
+        <div class="review-author"><div class="review-avatar"><i class="fas fa-user-circle"></i></div><div><strong>مریم کریمی</strong><span>خریدار ست عروسی</span></div></div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+        <p>«سکه امامی با قیمت عالی خریدم. فاکتور رسمی و مهر معتبر داشت. حتماً دوباره مراجعه می‌کنم.»</p>
+        <div class="review-author"><div class="review-avatar"><i class="fas fa-user-circle"></i></div><div><strong>حسین رضوی</strong><span>خریدار سکه</span></div></div>
+      </div>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+</section>
+
+<!-- ===== BLOG ===== -->
+<section id="blog" class="section blog-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-newspaper"></i> مقالات</span>
+      <h2 class="section-title">راهنمای طلا و سرمایه‌گذاری</h2>
+    </div>
+    <div class="blog-grid">
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="blog-img"><i class="fas fa-chart-line"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">قیمت روز</span>
+          <h3>قیمت طلا امروز</h3>
+          <p>آخرین نرخ‌های طلا و عوامل موثر بر قیمت طلا در بازار ایران</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="150">
+        <div class="blog-img"><i class="fas fa-book-open"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">راهنما</span>
+          <h3>راهنمای خرید طلا</h3>
+          <p>نکات کلیدی که هنگام خرید طلا باید بدانید تا بهترین خرید را داشته باشید</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="blog-img"><i class="fas fa-hammer"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">آموزش</span>
+          <h3>اجرت ساخت چیست؟</h3>
+          <p>توضیح کامل اجرت ساخت طلا و نحوه محاسبه آن در فاکتور خرید</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="250">
+        <div class="blog-img"><i class="fas fa-balance-scale"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">تفاوت</span>
+          <h3>طلای ۱۸ در برابر ۲۴ عیار</h3>
+          <p>تفاوت‌های اساسی بین طلای ۱۸ و ۲۴ عیار و کدام یک برای شما مناسب‌تر است</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="blog-img"><i class="fas fa-piggy-bank"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">سرمایه‌گذاری</span>
+          <h3>سرمایه‌گذاری روی طلا</h3>
+          <p>آیا خرید طلا سرمایه‌گذاری مناسبی است؟ بررسی مزایا و معایب</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+      <div class="blog-card" data-aos="fade-up" data-aos-delay="350">
+        <div class="blog-img"><i class="fas fa-clock"></i></div>
+        <div class="blog-body">
+          <span class="blog-cat">زمان‌بندی</span>
+          <h3>بهترین زمان خرید طلا</h3>
+          <p>تحلیل بازار و بهترین زمان برای خرید طلا جهت بیشترین سود</p>
+          <a href="tel:09173957436" class="blog-link">مشاوره <i class="fas fa-arrow-left"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="section faq-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-circle-question"></i> سوالات</span>
+      <h2 class="section-title">سوالات متداول</h2>
+    </div>
+    <div class="faq-list" data-aos="fade-up" data-aos-delay="100">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>چگونه از اصالت طلا مطمئن شوم؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">تمام محصولات طلای تاج دارای فاکتور رسمی، مهر عیارسنجی معتبر و شناسنامه کالا هستند. می‌توانید از دستگاه اسپکتروسکوپ ما برای تأیید عیار استفاده کنید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>اجرت ساخت طلا چقدر است؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">اجرت ساخت بستگی به نوع مصنوع، پیچیدگی طراحی و وزن طلا دارد. معمولاً بین ۵ تا ۲۵ درصد متغیر است. در طلای تاج اجرت ساخت به صورت کاملاً شفاف در فاکتور ذکر می‌شود.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>آیا امکان بازگشت طلا وجود دارد؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">بله، طلای خریداری شده را می‌توانید با قیمت روز و کسر اجرت ساخت بازگشت دهید. برای اطلاعات بیشتر با ما تماس بگیرید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>تفاوت طلای ۱۸ و ۲۴ عیار چیست؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">طلای ۲۴ عیار (۹۹۹) خالص‌ترین نوع طلاست اما نرم و کمتر مناسب جواهرات است. طلای ۱۸ عیار (۷۵۰) ۷۵٪ طلای خالص دارد و با آلیاژهای دیگر ترکیب شده که آن را مستحکم‌تر و مناسب‌تر برای جواهرات می‌کند.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>آیا سفارش ساخت طلا امکان‌پذیر است؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">بله، طلای تاج امکان ساخت جواهرات کاملاً اختصاصی را بر اساس طرح مورد نظر شما دارد. می‌توانید از طریق فرم سفارش ویژه یا تماس مستقیم درخواست خود را ثبت کنید.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>قیمت‌های سایت چقدر به‌روز هستند؟</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="faq-a">قیمت‌های نمایش داده شده در سایت به صورت خودکار هر ۶۰ ثانیه از بازار بین‌المللی و بازار داخلی به‌روزرسانی می‌شوند.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="section contact-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-label"><i class="fas fa-location-dot"></i> ارتباط</span>
+      <h2 class="section-title">تماس با طلای تاج</h2>
+    </div>
+
+    <div class="contact-grid" data-aos="fade-up" data-aos-delay="100">
+      <div class="contact-info">
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-store"></i></div>
+          <div class="cc-body">
+            <h4>فروشگاه طلای تاج</h4>
+            <p>مدیریت: رضایی</p>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-phone"></i></div>
+          <div class="cc-body">
+            <h4>تماس مستقیم</h4>
+            <a href="tel:09173957436">۰۹۱۷۳۹۵۷۴۳۶</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fab fa-whatsapp"></i></div>
+          <div class="cc-body">
+            <h4>واتساپ</h4>
+            <a href="https://wa.me/989173957436" target="_blank">۰۹۱۷۳۹۵۷۴۳۶</a>
+          </div>
+        </div>
+        <div class="contact-card">
+          <div class="cc-icon"><i class="fas fa-clock"></i></div>
+          <div class="cc-body">
+            <h4>ساعت کاری</h4>
+            <p>شنبه تا پنجشنبه: ۹ تا ۲۱</p>
+            <p>جمعه: تعطیل</p>
+          </div>
+        </div>
+        <div class="contact-actions">
+          <a href="tel:09173957436" class="btn-primary"><i class="fas fa-phone"></i> تماس مستقیم</a>
+          <a href="https://wa.me/989173957436" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> پیام واتساپ</a>
+        </div>
+      </div>
+      <div class="contact-map">
+        <div class="map-placeholder">
+          <i class="fas fa-map-location-dot"></i>
+          <p>نقشه فروشگاه</p>
+          <span>برای دریافت آدرس دقیق تماس بگیرید</span>
+          <a href="tel:09173957436" class="btn-primary mt"><i class="fas fa-phone"></i> دریافت آدرس</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <span class="logo-icon"><i class="fas fa-crown"></i></span>
+          <div class="logo-text">
+            <span class="logo-main">طلای تاج</span>
+            <span class="logo-sub">GOLD & JEWELRY</span>
+          </div>
+        </div>
+        <p>مرجع قیمت روز طلا، معرفی مصنوعات طلا و جواهر و مشاوره تخصصی خرید</p>
+        <div class="footer-social">
+          <a href="tel:09173957436" aria-label="تماس"><i class="fas fa-phone"></i></a>
+          <a href="https://wa.me/989173957436" target="_blank" aria-label="واتساپ"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>دسترسی سریع</h4>
+        <a href="#home">خانه</a>
+        <a href="#prices">قیمت روز طلا</a>
+        <a href="#calculator">ماشین حساب</a>
+        <a href="#products">محصولات</a>
+        <a href="#blog">مقالات</a>
+        <a href="#contact">تماس</a>
+      </div>
+      <div class="footer-links">
+        <h4>خدمات</h4>
+        <a href="#products">خرید طلا و جواهر</a>
+        <a href="#products">فروش طلای دست دوم</a>
+        <a href="#order">سفارش ساخت</a>
+        <a href="#calculator">محاسبه قیمت</a>
+        <a href="tel:09173957436">مشاوره رایگان</a>
+      </div>
+      <div class="footer-contact">
+        <h4>تماس با ما</h4>
+        <p><i class="fas fa-phone"></i> <a href="tel:09173957436">۰۹۱۷۳۹۵۷۴۳۶</a></p>
+        <p><i class="fab fa-whatsapp"></i> <a href="https://wa.me/989173957436" target="_blank">واتساپ</a></p>
+        <p><i class="fas fa-clock"></i> شنبه تا پنجشنبه ۹–۲۱</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© ۱۴۰۳ طلای تاج – تمامی حقوق محفوظ است</p>
+      <p>مدیریت: رضایی | <a href="tel:09173957436">۰۹۱۷۳۹۵۷۴۳۶</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== FLOATING BUTTONS ===== -->
+<div class="fab-group">
+  <a href="tel:09173957436" class="fab fab-phone" aria-label="تماس">
+    <i class="fas fa-phone"></i>
+  </a>
+  <a href="https://wa.me/989173957436" target="_blank" class="fab fab-wa" aria-label="واتساپ">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+  <div class="lb-content">
+    <div class="lb-img-wrap" id="lbImgWrap"></div>
+    <div class="lb-info" id="lbInfo"></div>
+    <div class="lb-actions">
+      <a href="tel:09173957436" class="btn-primary"><i class="fas fa-phone"></i> تماس</a>
+      <a href="https://wa.me/989173957436" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> استعلام</a>
+    </div>
+  </div>
+</div>
+
+<!-- Print Template -->
+<div id="printInvoiceArea" style="display:none;">
+  <div id="printContent"></div>
+</div>
+
+<!-- AOS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

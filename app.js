@@ -102,7 +102,7 @@ function initParticles() {
 // PRICE FETCH — Oanor API (with fallback demo data)
 // ============================================================
 const API_URL = 'https://api.oanor.com/irr-api';
-const API_KEY = 'YOUR_API_KEY'; // Replace with actual key
+const API_KEY = 'oanor_live_05909d41959110495cedb8944829d80acea760812f5dd2dc9fcb7e59c1facc12'; // Replace with actual key
 
 // Demo/fallback data (realistic IRR values for simulation)
 const DEMO_PRICES = {

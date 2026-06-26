@@ -11,7 +11,7 @@
 // بعد از deploy کردن Worker، آدرس زیر را با آدرس Worker خود عوض کنید
 // مثال: https://tajgold-proxy.YOUR-SUBDOMAIN.workers.dev
 // ============================================================
-const PROXY_URL  = 'https://talataaj.shafieibusiness2001.workers.dev/';
+const PROXY_URL  = 'https://tajgold-proxy.YOUR-SUBDOMAIN.workers.dev';
 const REFRESH_MS = 60_000;
 
 // ============================================================
@@ -214,45 +214,39 @@ async function fetchPrices() {
   if (syncIcon) syncIcon.style.animationDuration = '2s';
 }
 
-// ★ FIXED: robust multi-format Oanor response parser
+// ★ Nerkh.io response parser
+// ساختار: { data: { prices: { GOLD18K: { current, min, max, update }, ... } } }
 function parseOanorResponse(raw) {
-  // Oanor API can return flat object OR nested — handle both
-  // Inspect raw in browser console to find exact field names
-  const r = raw?.data ?? raw; // some versions wrap in {data:{}}
+  const prices = raw?.data?.prices ?? raw?.prices ?? {};
 
-  const grab = (...keys) => {
-    for (const k of keys) {
-      const v = r?.[k];
-      if (v !== undefined && v !== null) return v;
-    }
-    return null;
-  };
+  const g = (key) => prices?.[key]; // get field by key
 
-  const field = (val, usd = false) => {
-    if (val === null || val === undefined) return null;
-    // value might be number or object {price, change, percent}
-    if (typeof val === 'number') return { price: val, change: 0, pct: 0, usd };
-    if (typeof val === 'object') {
-      const price = val.price ?? val.value ?? val.sell ?? val.p ?? 0;
-      const change = val.change ?? val.diff ?? val.d ?? 0;
-      const pct = val.percent ?? val.pct ?? val.dp ?? 0;
-      return price ? { price, change, pct, usd } : null;
-    }
-    return null;
+  const field = (obj, usd = false) => {
+    if (!obj) return null;
+    // nerkh returns: { current: 7000000, min: {...}, max: {...}, update: "..." }
+    const price = typeof obj === 'object'
+      ? Number(obj.current ?? obj.price ?? 0)
+      : Number(obj);
+    if (!price) return null;
+    // Calculate change from 1h min/max if available
+    const min1h = Number(obj?.min?.one_hour ?? obj?.min ?? price);
+    const change = price - min1h;
+    const pct = min1h ? (change / min1h) * 100 : 0;
+    return { price, change: Math.round(change), pct: parseFloat(pct.toFixed(2)), usd };
   };
 
   return {
-    gold18: field(grab('gold_18','geram_18','18','g18','gold18')),
-    gold24: field(grab('gold_24','geram_24','24','g24','gold24')),
-    misqal: field(grab('mithqal','misqal','mesghal','mesgal')),
-    ounce:  field(grab('ounce','oz','gold_ounce'), true),
-    emami:  field(grab('emami','coin_emami','sekke_emami','full_coin','bahar')),
-    nim:    field(grab('nim','nim_sekke','half_coin','sekke_nim')),
-    rob:    field(grab('rob','rob_sekke','quarter_coin','sekke_rob')),
-    gerami: field(grab('gerami','gram_coin','sekke_gerami','1gram')),
-    usd:    field(grab('usd','dollar','dolar','USD')),
-    eur:    field(grab('eur','euro','EUR')),
-    usdt:   field(grab('usdt','tether','USDT')),
+    gold18: field(g('GOLD18K')),
+    gold24: field(g('GOLD24K')),
+    misqal: field(g('MAZANEH')),
+    ounce:  field(g('OUNCE'), true),
+    emami:  field(g('SEKE_EMAMI')),
+    nim:    field(g('SEKE_NIM')),
+    rob:    field(g('SEKE_ROB')),
+    gerami: field(g('SEKE_1G')),
+    usd:    field(g('USD')),
+    eur:    field(g('EUR')),
+    usdt:   field(g('USDT')),
   };
 }
 

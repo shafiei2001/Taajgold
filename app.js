@@ -6,8 +6,12 @@
 // ============================================================
 // CONFIG  ← کلید API را اینجا وارد کنید
 // ============================================================
-const API_KEY = 'oanor_live_05909d41959110495cedb8944829d80acea760812f5dd2dc9fcb7e59c1facc12';   // ← جایگزین کنید
-const API_URL = 'https://api.oanor.com/irr-api';
+// ============================================================
+// ★ تنظیمات API
+// بعد از deploy کردن Worker، آدرس زیر را با آدرس Worker خود عوض کنید
+// مثال: https://tajgold-proxy.YOUR-SUBDOMAIN.workers.dev
+// ============================================================
+const PROXY_URL  = 'https://talataaj.shafieibusiness2001.workers.dev/';
 const REFRESH_MS = 60_000;
 
 // ============================================================
@@ -159,25 +163,22 @@ async function fetchPrices() {
   const syncIcon = document.getElementById('syncIcon');
   if (syncIcon) syncIcon.style.animationDuration = '0.8s';
 
-  // Skip API call if key not set
-  if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
-    showApiStatus('error');
+  // اگر آدرس Proxy تنظیم نشده باشد
+  if (!PROXY_URL || PROXY_URL.includes('YOUR-SUBDOMAIN')) {
+    showApiStatus('demo');
     applyPrices(demoWithNoise());
     updateTimestamp();
     if (syncIcon) syncIcon.style.animationDuration = '2s';
     return;
   }
 
-  // FIX: proper AbortController for Safari compatibility
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 10_000);
 
   try {
-    const res = await fetch(API_URL, {
-      headers: {
-        'x-api-key': API_KEY,
-        'Accept': 'application/json',
-      },
+    const res = await fetch(PROXY_URL, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
       signal: controller.signal,
     });
     clearTimeout(timer);

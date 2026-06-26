@@ -471,6 +471,29 @@ input:focus, select:focus, textarea:focus {
    ============================================================ */
 .prices-section { background: var(--ivory); }
 
+.tala-widget-wrap {
+  background: var(--black2);
+  border-radius: var(--radius);
+  padding: 4px;
+  border: 1.5px solid rgba(212,175,55,.2);
+  box-shadow: var(--shadow-gold);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.tala-widget-wrap iframe { border-radius: 12px; }
+.tala-credit {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  justify-content: center;
+  padding: 10px;
+  font-size: .75rem;
+  color: rgba(255,255,255,.35);
+  direction: rtl;
+}
+.tala-credit a { color: rgba(212,175,55,.6); font-weight: 600; }
+.tala-credit a:hover { color: var(--gold); }
+
 .update-info {
   display: inline-flex;
   align-items: center;

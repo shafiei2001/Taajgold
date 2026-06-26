@@ -1447,6 +1447,18 @@ input:focus, select:focus, textarea:focus {
 /* ============================================================
    UTILITIES
    ============================================================ */
+
+/* Price card flash on update */
+@keyframes priceFlash {
+  0%   { background: transparent; }
+  30%  { background: rgba(212,175,55,.12); }
+  100% { background: transparent; }
+}
+.price-card.price-flash { animation: priceFlash .6s ease; }
+
+/* Scroll offset for fixed header */
+:target { scroll-margin-top: 88px; }
+
 .gold-gradient {
   background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
   -webkit-background-clip: text;

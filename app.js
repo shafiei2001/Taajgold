@@ -161,7 +161,7 @@ async function fetchPrices() {
 
   // Skip API call if key not set
   if (!API_KEY || API_KEY === 'YOUR_API_KEY') {
-    showApiStatus('demo');
+    showApiStatus('error');
     applyPrices(demoWithNoise());
     updateTimestamp();
     if (syncIcon) syncIcon.style.animationDuration = '2s';
@@ -202,9 +202,10 @@ async function fetchPrices() {
 
   } catch (err) {
     clearTimeout(timer);
-    console.warn('[طلای تاج] API error, using demo data:', err.message);
+    const detail = err.name === 'AbortError' ? 'timeout' : (err.message || String(err));
+    console.warn('[طلای تاج] API error:', detail);
     apiWorking = false;
-    showApiStatus('demo');
+    showApiStatus('error', detail);
     applyPrices(demoWithNoise());
   }
 
@@ -263,30 +264,54 @@ function demoWithNoise() {
   return out;
 }
 
-function showApiStatus(mode) {
+function showApiStatus(mode, detail = '') {
   let bar = document.getElementById('apiStatusBar');
   if (!bar) {
     bar = document.createElement('div');
     bar.id = 'apiStatusBar';
-    bar.style.cssText = `
-      position:fixed;bottom:90px;left:24px;z-index:9999;
-      padding:7px 14px;border-radius:20px;font-size:.75rem;font-weight:700;
-      font-family:Vazirmatn,sans-serif;direction:rtl;
-      box-shadow:0 2px 12px rgba(0,0,0,.2);transition:opacity .5s;
-    `;
+    bar.style.cssText = [
+      'position:fixed;bottom:90px;left:24px;z-index:9999;',
+      'padding:7px 16px;border-radius:20px;font-size:.75rem;font-weight:700;',
+      'font-family:Vazirmatn,sans-serif;direction:rtl;max-width:280px;',
+      'box-shadow:0 2px 12px rgba(0,0,0,.25);transition:opacity .5s;'
+    ].join('');
     document.body.appendChild(bar);
   }
+
   if (mode === 'live') {
     bar.style.background = '#22c55e';
     bar.style.color = '#fff';
     bar.textContent = '● قیمت زنده';
     bar.style.opacity = '1';
     setTimeout(() => { bar.style.opacity = '0'; }, 4000);
-  } else {
+
+  } else if (mode === 'demo') {
+    // Key not set at all
     bar.style.background = '#f59e0b';
     bar.style.color = '#000';
     bar.textContent = '⚠ داده آزمایشی — کلید API وارد نشده';
     bar.style.opacity = '1';
+
+  } else if (mode === 'error') {
+    // Key is set but API call failed
+    bar.style.background = '#ef4444';
+    bar.style.color = '#fff';
+    bar.title = detail; // full error on hover
+    // Detect likely cause
+    let msg = '⚠ خطای API — داده آزمایشی';
+    if (detail.includes('401') || detail.includes('403')) {
+      msg = '⚠ کلید API نامعتبر است (401/403)';
+    } else if (detail.includes('CORS') || detail.includes('NetworkError') || detail.includes('Failed to fetch')) {
+      msg = '⚠ خطای CORS — سرور اونور را بررسی کنید';
+    } else if (detail.includes('timeout') || detail.includes('abort')) {
+      msg = '⚠ پاسخ API دریافت نشد (timeout)';
+    } else if (detail.includes('empty') || detail.includes('unrecognised')) {
+      msg = '⚠ فرمت پاسخ API ناشناخته — کنسول را ببینید';
+    }
+    bar.textContent = msg;
+    bar.style.opacity = '1';
+    // Keep visible longer for errors
+    setTimeout(() => { bar.style.opacity = '0.3'; }, 8000);
   }
 }
 

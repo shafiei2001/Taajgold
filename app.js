@@ -11,7 +11,7 @@
 // بعد از deploy کردن Worker، آدرس زیر را با آدرس Worker خود عوض کنید
 // مثال: https://tajgold-proxy.YOUR-SUBDOMAIN.workers.dev
 // ============================================================
-const PROXY_URL  = 'https://talataaj.shafieibusiness2001.workers.dev/';
+const PROXY_URL  = 'https://talataaj.shafieibusiness2001.workers.dev';
 const REFRESH_MS = 60_000;
 
 // ============================================================

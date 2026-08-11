@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Gold Decision Engine | موتور تحلیل آماری طلای ۱۸ عیار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --gold:#C9A227;
+    --gold-light:#E8D48A;
+    --gold-dark:#8A6A16;
+    --white:#FFFFFF;
+    --bg:#F7F7F5;
+    --text:#222222;
+    --muted:#7A7A76;
+    --green:#168A45;
+    --red:#C93636;
+    --orange:#D9822B;
+    --card-radius:18px;
+    --border:#E7E4DA;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Vazirmatn', 'Iranian Sans', 'Tahoma', sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    direction:rtl;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:60px;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:16px;}
+  header.top{
+    background:linear-gradient(135deg, var(--gold-dark), var(--gold));
+    color:#fff;
+    padding:22px 18px;
+    border-radius:0 0 22px 22px;
+    margin-bottom:18px;
+    box-shadow:0 4px 18px rgba(138,106,22,.18);
+  }
+  header.top h1{margin:0;font-size:22px;font-weight:800;letter-spacing:.3px;}
+  header.top p.sub{margin:4px 0 0;font-size:13px;opacity:.92;font-weight:500;}
+  .status-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;font-size:12px;}
+  .status-pill{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.35);
+    padding:6px 12px;border-radius:20px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+  .dot.green{background:#5BE39D;}
+  .dot.yellow{background:#FFD873;}
+  .dot.red{background:#FF8A8A;}
+
+  .tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px;}
+  .tab-btn{
+    flex:0 0 auto;
+    background:#fff;border:1px solid var(--border);color:var(--muted);
+    padding:9px 16px;border-radius:14px;font-size:13px;font-weight:600;cursor:pointer;
+    white-space:nowrap;transition:.15s;
+  }
+  .tab-btn.active{background:var(--gold);color:#fff;border-color:var(--gold);}
+
+  .card{
+    background:#fff;border:1px solid var(--border);border-radius:var(--card-radius);
+    padding:18px;margin-bottom:16px;
+  }
+  .card h2{font-size:15px;margin:0 0 14px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .card h2 .bar{width:4px;height:16px;background:var(--gold);border-radius:3px;display:inline-block;}
+  .card h3{font-size:13px;color:var(--muted);margin:18px 0 8px;font-weight:700;}
+
+  .mode-switch{display:flex;gap:8px;margin-bottom:14px;}
+  .mode-switch button{
+    flex:1;padding:10px;border-radius:12px;border:1px solid var(--border);background:#fbfbf9;
+    font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);
+  }
+  .mode-switch button.active{background:var(--gold-light);color:var(--gold-dark);border-color:var(--gold);}
+
+  .field-group{
+    border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:12px;background:#fdfdfb;
+  }
+  .field-group .fg-title{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--gold-dark);}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  @media (max-width:640px){
+    .grid5{grid-template-columns:repeat(2,1fr);}
+    .grid3{grid-template-columns:repeat(2,1fr);}
+  }
+  label.field-label{display:block;font-size:11px;color:var(--muted);margin-bottom:4px;}
+  input.num-input, input.text-input{
+    width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--border);
+    font-family:inherit;font-size:13px;background:#fff;color:var(--text);
+    direction:ltr;text-align:left;
+  }
+  input.num-input:focus, input.text-input:focus{outline:2px solid var(--gold-light);border-color:var(--gold);}
+  .unit-tag{font-size:10px;color:var(--muted);margin-top:3px;}
+
+  .btn-main{
+    width:100%;padding:16px;border-radius:16px;border:none;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+    color:#fff;font-size:16px;font-weight:800;cursor:pointer;
+    box-shadow:0 6px 16px rgba(201,162,39,.35);
+    margin:6px 0 4px;
+  }
+  .btn-main:active{transform:translateY(1px);}
+  .btn-secondary{
+    padding:10px 16px;border-radius:12px;border:1px solid var(--gold);background:#fff;color:var(--gold-dark);
+    font-weight:700;font-size:13px;cursor:pointer;
+  }
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap;}
+
+  .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  @media (max-width:900px){.dash-grid{grid-template-columns:repeat(2,1fr);}}
+  .metric-box{
+    background:#fdfdfb;border:1px solid var(--border);border-radius:14px;padding:12px 14px;
+  }
+  .metric-box .label{font-size:11px;color:var(--muted);margin-bottom:6px;}
+  .metric-box .value{font-size:22px;font-weight:800;}
+  .value.pos{color:var(--green);}
+  .value.neg{color:var(--red);}
+  .value.neutral{color:var(--orange);}
+
+  .decision-card{
+    text-align:center;padding:30px 18px;border-radius:22px;
+    border:1px solid var(--border);
+  }
+  .decision-card .dtitle{font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:700;}
+  .decision-badge{font-size:38px;font-weight:900;margin:6px 0 14px;}
+  .decision-badge.buy{color:var(--green);}
+  .decision-badge.wait{color:var(--orange);}
+  .decision-badge.nobuy{color:var(--red);}
+  .decision-sub{font-size:32px;line-height:1;}
+
+  .explain-list{list-style:none;padding:0;margin:0;font-size:13px;}
+  .explain-list li{padding:7px 0;border-bottom:1px dashed var(--border);display:flex;gap:8px;align-items:flex-start;}
+  .explain-list li:last-child{border-bottom:none;}
+  .explain-list li.warn{color:var(--orange);}
+  .explain-list li.good{color:var(--text);}
+  .tick{color:var(--green);font-weight:800;}
+  .warnsign{color:var(--orange);font-weight:800;}
+
+  table.data-table{width:100%;border-collapse:collapse;font-size:12px;}
+  table.data-table th, table.data-table td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--border);white-space:nowrap;}
+  table.data-table th{color:var(--muted);font-weight:700;background:#fbfbf9;}
+  .table-scroll{overflow-x:auto;}
+
+  .quality-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;font-size:13px;}
+  .quality-row{display:flex;justify-content:space-between;align-items:center;background:#fdfdfb;border:1px solid var(--border);padding:9px 12px;border-radius:10px;}
+  .qok{color:var(--green);font-weight:800;}
+  .qwarn{color:var(--orange);font-weight:800;}
+  .qbad{color:var(--red);font-weight:800;}
+
+  .disclaimer{
+    font-size:11.5px;color:var(--muted);background:#fdfdfb;border:1px dashed var(--border);
+    border-radius:12px;padding:12px 14px;line-height:1.9;
+  }
+  .footer-note{text-align:center;font-size:11px;color:var(--muted);margin-top:20px;}
+  .hidden{display:none !important;}
+  .chart-wrap{position:relative;height:260px;margin-top:10px;}
+  .banner-stop{
+    background:#fdecec;border:1px solid var(--red);color:var(--red);
+    padding:12px 14px;border-radius:12px;font-size:13px;font-weight:700;margin-bottom:14px;
+  }
+  .banner-info{
+    background:#fdf6e3;border:1px solid var(--orange);color:#8a5a10;
+    padding:12px 14px;border-radius:12px;font-size:12.5px;margin-bottom:14px;line-height:1.8;
+  }
+  .small-muted{font-size:11px;color:var(--muted);}
+  .demo-tag{
+    display:inline-block;background:var(--gold-light);color:var(--gold-dark);
+    font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px;margin-right:6px;
+  }
+  .kv{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px dashed var(--border);}
+  .kv:last-child{border-bottom:none;}
+  .kv .k{color:var(--muted);}
+  .kv .v{font-weight:700;}
+  .col2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media (max-width:760px){.col2{grid-template-columns:1fr;}}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:12.5px;}
+  .settings-row input[type=number]{width:90px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Gold Decision Engine</h1>
+    <p class="sub">موتور تحلیل آماری طلای ۱۸ عیار ایران</p>
+    <div class="status-row">
+      <span class="status-pill">آخرین بروزرسانی: <b id="lastUpdateLabel">—</b></span>
+      <span class="status-pill" id="dataStatusPill"><span class="dot yellow" id="dataStatusDot"></span> <span id="dataStatusText">در انتظار داده</span></span>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">داشبورد</button>
+    <button class="tab-btn" data-tab="input">اطلاعات بازار</button>
+    <button class="tab-btn" data-tab="details">جزئیات آماری</button>
+    <button class="tab-btn" data-tab="backtest">Backtest</button>
+    <button class="tab-btn" data-tab="history">تاریخچه</button>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="tab-dashboard">
+    <div id="stopBanner" class="banner-stop hidden"></div>
+
+    <div class="card decision-card" id="decisionCard">
+      <div class="dtitle">تصمیم مدل</div>
+      <div class="decision-badge wait" id="decisionBadge">— در انتظار محاسبه —</div>
+      <div class="dash-grid" style="margin-top:10px;">
+        <div class="metric-box"><div class="label">احتمال رشد ۷ روزه</div><div class="value neutral" id="mProb7">—</div></div>
+        <div class="metric-box"><div class="label">بازده مورد انتظار</div><div class="value neutral" id="mExpRet">—</div></div>
+        <div class="metric-box"><div class="label">ریسک</div><div class="value neutral" id="mRisk">—</div></div>
+        <div class="metric-box"><div class="label">اعتماد مدل</div><div class="value neutral" id="mConf">—</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>خلاصه بازار</h2>
+      <div class="dash-grid">
+        <div class="metric-box"><div class="label">طلای ۱۸ عیار</div><div class="value" id="dGold18">—</div></div>
+        <div class="metric-box"><div class="label">Fair Value</div><div class="value" id="dFairValue">—</div></div>
+        <div class="metric-box"><div class="label">Gap</div><div class="value" id="dGap">—</div></div>
+        <div class="metric-box"><div class="label">روند</div><div class="value" id="dTrend">—</div></div>
+      </div>
+    </div>
+
+    <div class="card" id="explainCard">
+      <h2><span class="bar"></span>چرا مدل این تصمیم را گرفته؟</h2>
+      <ul class="explain-list" id="explainList">
+        <li class="small-muted">برای مشاهده توضیح، ابتدا اطلاعات بازار را وارد و دکمه «محاسبه و تحلیل بازار» را بزنید.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>کیفیت داده</h2>
+      <div class="quality-grid" id="qualityGrid"></div>
+    </div>
+
+    <div class="disclaimer">
+      این نرم‌افزار ابزار تحلیل آماری و تصمیم‌یار است و هیچ تضمینی برای سود یا صحت پیش‌بینی آینده ارائه نمی‌کند. تمام احتمال‌ها بر پایه شباهت آماری با شرایط تاریخی محاسبه می‌شوند، نه پیش‌بینی قطعی. تصمیم مالی نهایی بر عهده کاربر است.
+    </div>
+  </section>
+
+  <!-- ============ INPUT ============ -->
+  <section id="tab-input" class="hidden">
+    <div class="card">
+      <h2><span class="bar"></span>بارگذاری سریع تاریخچه (Bulk Import)</h2>
+      <p class="small-muted">
+        مدل آماری برای محاسبه احتمال معتبر نیاز به حداقل چند ده رکورد تاریخی دارد. اگر فقط چند رکورد دستی ثبت کنید،
+        بخش «تصمیم» تا مدت‌ها فعال نمی‌شود. سریع‌ترین راه: تاریخچه قیمت‌های گذشته را اینجا جای‌گذاری کنید تا فوراً
+        تحلیل آماری واقعی فعال شود. هر خط یک روز؛ فرمت:
+      </p>
+      <p class="small-muted" style="direction:ltr;text-align:left;font-family:monospace;background:#fdfdfb;padding:8px;border-radius:8px;border:1px solid var(--border);">
+        YYYY-MM-DD, gold18, usd, xau
+      </p>
+      <p class="small-muted">مثال: <span style="direction:ltr;display:inline-block;font-family:monospace;">2026-05-01, 6800000, 68000, 2350</span> — ستون‌های Open/High/Low اختیاری‌اند و اگر ندهید همان قیمت بسته‌شدن در نظر گرفته می‌شود.</p>
+      <textarea id="bulkPasteArea" class="text-input" rows="6" style="width:100%;font-family:monospace;direction:ltr;text-align:left;resize:vertical;" placeholder="2026-05-01, 6800000, 68000, 2350&#10;2026-05-02, 6815000, 68200, 2354&#10;..."></textarea>
+      <div class="btn-row" style="margin-top:10px;">
+        <button class="btn-secondary" id="bulkLoadBtn">افزودن این داده‌ها به تاریخچه</button>
+        <button class="btn-secondary" id="loadDemoBtnInput">بارگذاری داده نمایشی برای تست <span class="demo-tag">DEMO</span></button>
+      </div>
+      <p class="small-muted" id="bulkLoadStatus"></p>
+    </div>
+
+    <div class="card">
+      <div class="mode-switch">
+        <button id="modeQuickBtn" class="active">حالت سریع</button>
+        <button id="modeProBtn">حالت حرفه‌ای</button>
+      </div>
+
+      <h2><span class="bar"></span>اطلاعات بازار</h2>
+
+      <div class="field-group">
+        <div class="fg-title">طلای ۱۸ عیار (تومان)</div>
+        <div class="grid5">
+          <div><label class="field-label">قیمت فعلی</label><input type="number" class="num-input" id="gold18_close"></div>
+          <div><label class="field-label">Open</label><input type="number" class="num-input" id="gold18_open"></div>
+          <div><label class="field-label">High</label><input type="number" class="num-input" id="gold18_high"></div>
+          <div><label class="field-label">Low</label><input type="number" class="num-input" id="gold18_low"></div>
+          <div><label class="field-label">Close</label><input type="number" class="num-input" id="gold18_closeval"></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="fg-title">دلار آزاد (تومان)</div>
+        <div class="grid5">
+          <div><label class="field-label">قیمت فعلی</label><input type="number" class="num-input" id="usd_close"></div>
+          <div><label class="field-label">Open</label><input type="number" class="num-input" id="usd_open"></div>
+          <div><label class="field-label">High</label><input type="number" class="num-input" id="usd_high"></div>
+          <div><label class="field-label">Low</label><input type="number" class="num-input" id="usd_low"></div>
+          <div><label class="field-label">Close</label><input type="number" class="num-input" id="usd_closeval"></div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="fg-title">انس جهانی طلا (دلار)</div>
+        <div class="grid5">
+          <div><label class="field-label">قیمت فعلی</label><input type="number" class="num-input" id="xau_close"></div>
+          <div><label class="field-label">Open</label><input type="number" class="num-input" id="xau_open"></div>
+          <div><label class="field-label">High</label><input type="number" class="num-input" id="xau_high"></div>
+          <div><label class="field-label">Low</label><input type="number" class="num-input" id="xau_low"></div>
+          <div><label class="field-label">Close</label><input type="number" class="num-input" id="xau_closeval"></div>
+        </div>
+      </div>
+
+      <div id="proInputBlock" class="hidden">
+        <div class="field-group">
+          <div class="fg-title">سایر بازارهای طلا (تومان)</div>
+          <div class="grid3">
+            <div><label class="field-label">طلای آبشده</label><input type="number" class="num-input" id="meltedGold"></div>
+            <div><label class="field-label">سکه امامی</label><input type="number" class="num-input" id="coinEmami"></div>
+            <div><label class="field-label">حباب سکه</label><input type="number" class="num-input" id="coinBubble"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="fg-title">داده‌های جهانی (اختیاری — در صورت نبود، N/A باقی می‌ماند)</div>
+          <div class="grid3">
+            <div><label class="field-label">DXY</label><input type="number" class="num-input" id="dxy"></div>
+            <div><label class="field-label">US 10Y Yield</label><input type="number" class="num-input" id="us10y"></div>
+            <div><label class="field-label">Fed Funds Rate</label><input type="number" class="num-input" id="fedRate"></div>
+            <div><label class="field-label">VIX</label><input type="number" class="num-input" id="vix"></div>
+            <div><label class="field-label">Silver</label><input type="number" class="num-input" id="silver"></div>
+            <div><label class="field-label">WTI</label><input type="number" class="num-input" id="wti"></div>
+            <div><label class="field-label">Brent</label><input type="number" class="num-input" id="brent"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="fg-title">اقتصاد کلان آمریکا (اختیاری — هر مقدار همراه با تاریخ انتشار)</div>
+          <div id="macroFields"></div>
+          <p class="small-muted">توجه: مدل در محاسبات بک‌تست فقط از داده‌ای استفاده می‌کند که تا تاریخ آن رکورد، «تاریخ انتشار» آن گذشته باشد (جلوگیری از Look-Ahead Bias).</p>
+        </div>
+      </div>
+
+      <button class="btn-main" id="calcBtn">محاسبه و تحلیل بازار</button>
+      <p class="small-muted" style="text-align:center;">با ثبت، یک رکورد جدید با زمان فعلی به تاریخچه اضافه و تحلیل روی کل تاریخچه اجرا می‌شود.</p>
+    </div>
+  </section>
+
+  <!-- ============ DETAILS ============ -->
+  <section id="tab-details" class="hidden">
+
+    <div class="card">
+      <h2><span class="bar"></span>روند و مومنتوم — طلای ۱۸</h2>
+      <div class="col2">
+        <div>
+          <div class="kv"><span class="k">SMA5</span><span class="v" id="s_sma5">—</span></div>
+          <div class="kv"><span class="k">SMA10</span><span class="v" id="s_sma10">—</span></div>
+          <div class="kv"><span class="k">SMA20</span><span class="v" id="s_sma20">—</span></div>
+          <div class="kv"><span class="k">SMA50</span><span class="v" id="s_sma50">—</span></div>
+          <div class="kv"><span class="k">SMA100</span><span class="v" id="s_sma100">—</span></div>
+          <div class="kv"><span class="k">SMA200</span><span class="v" id="s_sma200">—</span></div>
+        </div>
+        <div>
+          <div class="kv"><span class="k">EMA9</span><span class="v" id="s_ema9">—</span></div>
+          <div class="kv"><span class="k">EMA21</span><span class="v" id="s_ema21">—</span></div>
+          <div class="kv"><span class="k">EMA50</span><span class="v" id="s_ema50">—</span></div>
+          <div class="kv"><span class="k">فاصله از SMA20</span><span class="v" id="s_distSma20">—</span></div>
+          <div class="kv"><span class="k">فاصله از SMA50</span><span class="v" id="s_distSma50">—</span></div>
+          <div class="kv"><span class="k">ATR14</span><span class="v" id="s_atr14">—</span></div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="chartPrice"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>بازده‌ها</h2>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>بازه</th><th>طلای ۱۸</th><th>دلار</th><th>انس</th><th>Fair Value</th></tr></thead>
+          <tbody id="returnsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>نوسان (Volatility)</h2>
+      <div class="grid3" id="volGrid" style="grid-template-columns:repeat(4,1fr);"></div>
+      <div class="chart-wrap"><canvas id="chartFV"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>همبستگی (Correlation — طلای ۱۸ با ...)</h2>
+      <div class="table-scroll">
+        <table class="data-table">
+          <thead><tr><th>پنجره</th><th>با دلار</th><th>با انس</th><th>با Fair Value</th></tr></thead>
+          <tbody id="corrTableBody"></tbody>
+        </table>
+      </div>
+      <div class="chart-wrap"><canvas id="chartUsdXau"></canvas></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>تطبیق الگوی تاریخی (Historical Pattern Matching)</h2>
+      <div class="kv"><span class="k">تعداد نمونه‌های مشابه</span><span class="v" id="p_sampleCount">—</span></div>
+      <div class="kv"><span class="k">احتمال رشد ۷ روزه</span><span class="v" id="p_prob7">—</span></div>
+      <div class="kv"><span class="k">احتمال رشد ≥ ۲٪</span><span class="v" id="p_probGe2">—</span></div>
+      <div class="kv"><span class="k">احتمال رشد ≥ ۵٪</span><span class="v" id="p_probGe5">—</span></div>
+      <div class="kv"><span class="k">احتمال کاهش (کمتر از ۰٪)</span><span class="v" id="p_probNeg">—</span></div>
+      <h3>آمار بازده مورد انتظار</h3>
+      <div class="kv"><span class="k">میانگین (Expected)</span><span class="v" id="p_mean">—</span></div>
+      <div class="kv"><span class="k">میانه (Median)</span><span class="v" id="p_median">—</span></div>
+      <div class="kv"><span class="k">بهترین حالت</span><span class="v" id="p_best">—</span></div>
+      <div class="kv"><span class="k">بدترین حالت</span><span class="v" id="p_worst">—</span></div>
+      <div class="kv"><span class="k">صدک ۱۰ / ۲۵ / ۷۵ / ۹۰</span><span class="v" id="p_pctl">—</span></div>
+      <p class="small-muted" id="p_note"></p>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>ریسک و اعتماد مدل</h2>
+      <div class="kv"><span class="k">Volatility (30D)</span><span class="v" id="r_vol30">—</span></div>
+      <div class="kv"><span class="k">ATR14</span><span class="v" id="r_atr">—</span></div>
+      <div class="kv"><span class="k">بدترین بازده تاریخی مشابه</span><span class="v" id="r_worstHist">—</span></div>
+      <div class="kv"><span class="k">حداکثر افت (Max Drawdown تاریخچه)</span><span class="v" id="r_mdd">—</span></div>
+      <div class="kv"><span class="k">احتمال زیان</span><span class="v" id="r_probLoss">—</span></div>
+      <div class="kv"><span class="k"><b>سطح ریسک نهایی</b></span><span class="v" id="r_final">—</span></div>
+      <hr style="border:none;border-top:1px dashed var(--border);margin:10px 0;">
+      <div class="kv"><span class="k">اندازه نمونه</span><span class="v" id="c_sample">—</span></div>
+      <div class="kv"><span class="k">ثبات احتمال (Stability)</span><span class="v" id="c_stab">—</span></div>
+      <div class="kv"><span class="k">کامل بودن داده</span><span class="v" id="c_completeness">—</span></div>
+      <div class="kv"><span class="k"><b>اعتماد مدل نهایی</b></span><span class="v" id="c_final">—</span></div>
+    </div>
+
+    <div class="card">
+      <h2><span class="bar"></span>تنظیمات آستانه (Threshold) — قابل تغییر توسط کاربر</h2>
+      <div class="settings-row"><span>حداقل نمونه تاریخی معتبر</span><input type="number" id="cfgMinSamples" value="20"></div>
+      <div class="settings-row"><span>آستانه رشد هدف (Target %)</span><input type="number" id="cfgTargetPct" value="2" step="0.5"></div>
+      <div class="settings-row"><span>حداقل احتمال برای BUY (٪)</span><input type="number" id="cfgBuyProb" value="65"></div>
+      <div class="settings-row"><span>حداکثر احتمال برای NO BUY (٪)</span><input type="number" id="cfgNoBuyProb" value="40"></div>
+      <button class="btn-secondary" id="recalcCfgBtn" style="margin-top:8px;">اعمال و محاسبه مجدد</button>
+      <p class="small-muted">این آستانه‌ها پیش‌فرض‌های قابل تنظیم هستند؛ نتایج بخش Backtest برای ارزیابی عملکرد همین آستانه‌ها روی داده تاریخی شماست، نه یک مقدار «کشف‌شده» بهینه مطلق.</p>
+    </div>
+  </section>
+
+  <!-- ============ BACKTEST ============ -->
+  <section id="tab-backtest" class="hidden">
+    <div class="card">
+      <h2><span class="bar"></span>Backtest (Walk-Forward)</h2>
+      <p class="small-muted">داده به صورت زمانی (بدون Shuffle) به سه بخش Training (۶۰٪) / Validation (۲۰٪) / Test (۲۰٪) تقسیم می‌شود. سیگنال هر روز فقط با داده‌های پیش از آن روز محاسبه می‌گردد.</p>
+      <div id="backtestEmptyMsg" class="banner-info hidden"></div>
+      <div id="backtestResults" class="hidden">
+        <div class="dash-grid">
+          <div class="metric-box"><div class="label">Total Signals</div><div class="value" id="bt_total">—</div></div>
+          <div class="metric-box"><div class="label">Win Rate</div><div class="value" id="bt_winrate">—</div></div>
+          <div class="metric-box"><div class="label">Winning</div><div class="value pos" id="bt_win">—</div></div>
+          <div class="metric-box"><div class="label">Losing</div><div class="value neg" id="bt_lose">—</div></div>
+          <div class="metric-box"><div class="label">Average Return</div><div class="value" id="bt_avg">—</div></div>
+          <div class="metric-box"><div class="label">Median Return</div><div class="value" id="bt_median">—</div></div>
+          <div class="metric-box"><div class="label">Best Trade</div><div class="value pos" id="bt_best">—</div></div>
+          <div class="metric-box"><div class="label">Worst Trade</div><div class="value neg" id="bt_worst">—</div></div>
+          <div class="metric-box"><div class="label">Max Drawdown</div><div class="value neg" id="bt_mdd">—</div></div>
+          <div class="metric-box"><div class="label">Profit Factor</div><div class="value" id="bt_pf">—</div></div>
+          <div class="metric-box"><div class="label">Sharpe Ratio</div><div class="value" id="bt_sharpe">—</div></div>
+          <div class="metric-box"><div class="label">وضعیت اعتبارسنجی</div><div class="value" id="bt_status">—</div></div>
+        </div>
+        <h3>مقایسه با Buy & Hold</h3>
+        <div class="kv"><span class="k">بازده مدل (Model, دوره تست)</span><span class="v" id="bt_modelReturn">—</span></div>
+        <div class="kv"><span class="k">بازده Buy &amp; Hold (دوره تست)</span><span class="v" id="bt_bhReturn">—</span></div>
+        <div class="chart-wrap"><canvas id="chartEquity"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY ============ -->
+  <section id="tab-history" class="hidden">
+    <div class="card">
+      <h2><span class="bar"></span>Import / Export</h2>
+      <div class="btn-row">
+        <button class="btn-secondary" id="exportBtn">⬇ دریافت خروجی (CSV)</button>
+        <button class="btn-secondary" id="importBtnTrigger">⬆ بارگذاری تاریخچه (CSV)</button>
+        <input type="file" id="importFileInput" accept=".csv" class="hidden">
+        <button class="btn-secondary" id="loadDemoBtn">بارگذاری داده نمایشی <span class="demo-tag">DEMO</span></button>
+        <button class="btn-secondary" id="clearHistoryBtn" style="border-color:var(--red);color:var(--red);">پاک‌کردن کل تاریخچه</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2><span class="bar"></span>تاریخچه رکوردها (<span id="histCount">0</span>)</h2>
+      <div class="table-scroll">
+        <table class="data-table" id="historyTable">
+          <thead><tr>
+            <th>تاریخ/زمان</th><th>طلای۱۸</th><th>دلار</th><th>انس</th><th>Fair Value</th><th>Gap</th><th>منبع</th><th></th>
+          </tr></thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">Gold Decision Engine — تک‌فایلی، بدون Backend، اجرا روی GitHub Pages. تمام محاسبات در مرورگر شما و بر پایه داده‌ای که خودتان وارد می‌کنید انجام می‌شود.</div>
+</div>
+
+<script>
+/* =====================================================================
+   Gold Decision Engine
+   -------------------------------------------------------------------
+   - No backend, no external data feed. All numbers come from the user
+     (Manual Input mode). Nothing here is a real market feed.
+   - The app NEVER fabricates a BUY/SELL signal when data is insufficient;
+     it explicitly reports "insufficient data" instead.
+   - Architecture is written so that future automated data sources
+     (Gold API / USD API / XAU API / Macro API) could be plugged into
+     the `fetchXxx()` stub functions below without touching the
+     calculation engine. No API key is ever hard-coded here.
+   ===================================================================== */
+
+/* ---------------------- Constants & config ---------------------- */
+const STORAGE_KEY = 'gde_history_v1';
+const CONFIG_KEY  = 'gde_config_v1';
+const OZ_TO_GRAM  = 31.1034768;
+const KARAT18_RATIO = 0.75; // 18/24
+const MIN_PATTERN_SAMPLES_HARD_FLOOR = 10; // below this, probability is never shown
+
+const MACRO_FIELDS = [
+  {id:'cpi', label:'CPI'}, {id:'coreCpi', label:'Core CPI'},
+  {id:'pce', label:'PCE'}, {id:'corePce', label:'Core PCE'},
+  {id:'nfp', label:'NFP'}, {id:'unemployment', label:'Unemployment Rate'},
+  {id:'gdp', label:'GDP'}, {id:'retailSales', label:'Retail Sales'},
+  {id:'ppi', label:'PPI'}, {id:'fedRateMacro', label:'Fed Rate'}
+];
+
+/* ---------------------- Utilities ---------------------- */
+function toEnglishDigits(str){
+  return String(str).replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+}
+function toPersianDigits(str){
+  return String(str).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+}
+function fmtNum(n, decimals=0){
+  if(n === null || n === undefined || isNaN(n)) return 'N/A';
+  const val = Number(n);
+  const s = val.toLocaleString('en-US', {minimumFractionDigits:decimals, maximumFractionDigits:decimals});
+  return toPersianDigits(s);
+}
+function fmtPct(n, decimals=1){
+  if(n === null || n === undefined || isNaN(n)) return 'N/A';
+  const sign = n > 0 ? '+' : '';
+  return toPersianDigits(sign + (n*100).toFixed(decimals)) + '٪';
+}
+function safeDiv(a,b){ return (b === 0 || b === null || b === undefined || isNaN(b)) ? null : a/b; }
+
+// Lightweight Gregorian -> Jalali (Persian) date conversion (no external lib).
+function gregorianToJalali(gy, gm, gd){
+  const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+  let jy;
+  gy = gy - 1600; gm = gm - 1; gd = gd - 1;
+  let gDayNo = 365*gy + Math.floor((gy+3)/4) - Math.floor((gy+99)/100) + Math.floor((gy+399)/400);
+  gDayNo += g_d_m[gm] + gd;
+  if (gm > 1 && ((gy+1600) % 4 === 0 && ((gy+1600) % 100 !== 0 || (gy+1600) % 400 === 0))) gDayNo++;
+  let jDayNo = gDayNo - 79;
+  const jNp = Math.floor(jDayNo / 12053);
+  jDayNo %= 12053;
+  jy = 979 + 33*jNp + 4*Math.floor(jDayNo/1461);
+  jDayNo %= 1461;
+  if (jDayNo >= 366) { jy += Math.floor((jDayNo-1)/365); jDayNo = (jDayNo-1)%365; }
+  let jm, jd;
+  if (jDayNo < 186) { jm = 1 + Math.floor(jDayNo/31); jd = 1 + (jDayNo % 31); }
+  else { jm = 7 + Math.floor((jDayNo-186)/30); jd = 1 + ((jDayNo-186) % 30); }
+  return [jy, jm, jd];
+}
+function formatPersianDateTime(date){
+  const [jy,jm,jd] = gregorianToJalali(date.getFullYear(), date.getMonth()+1, date.getDate());
+  const hh = String(date.getHours()).padStart(2,'0');
+  const mm = String(date.getMinutes()).padStart(2,'0');
+  const str = `${jy}/${String(jm).padStart(2,'0')}/${String(jd).padStart(2,'0')} - ${hh}:${mm}`;
+  return toPersianDigits(str);
+}
+
+/* ---------------------- State ---------------------- */
+let history = [];      // array of records, sorted ascending by timestamp
+let config = {
+  minSamples: 20,
+  targetPct: 2,
+  buyProbThreshold: 65,
+  noBuyProbThreshold: 40
+};
+let currentMode = 'quick'; // quick | pro
+let lastAnalysis = null;
+let charts = {};
+
+/* ---------------------- Persistence ---------------------- */
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    history = raw ? JSON.parse(raw) : [];
+  }catch(e){ console.error('History load failed', e); history = []; }
+  try{
+    const rawCfg = localStorage.getItem(CONFIG_KEY);
+    if(rawCfg) config = Object.assign(config, JSON.parse(rawCfg));
+  }catch(e){ console.error('Config load failed', e); }
+}
+function saveHistory(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); }
+  catch(e){ console.error('History save failed', e); alert('ذخیره‌سازی تاریخچه با خطا مواجه شد (احتمالاً فضای localStorage پر است).'); }
+}
+function saveConfig(){
+  try{ localStorage.setItem(CONFIG_KEY, JSON.stringify(config)); }
+  catch(e){ console.error('Config save failed', e); }
+}
+
+/* ---------------------- Future data source stubs (not used offline) ----------------------
+   These are intentionally unimplemented placeholders. If a browser-callable
+   market data API becomes available in the future, wire it in here.
+   No API key must ever be embedded in this file. Until then the app
+   always runs in Manual Input mode. */
+async function fetchGoldApiStub(){ return null; }
+async function fetchUsdApiStub(){ return null; }
+async function fetchXauApiStub(){ return null; }
+async function fetchMacroApiStub(){ return null; }
+
+/* ---------------------- Input collection ---------------------- */
+function collectMacroInputs(container){
+  const out = {};
+  MACRO_FIELDS.forEach(f=>{
+    const valEl = document.getElementById('macro_'+f.id+'_val');
+    const dateEl = document.getElementById('macro_'+f.id+'_date');
+    const val = valEl && valEl.value !== '' ? parseFloat(toEnglishDigits(valEl.value)) : null;
+    const date = dateEl && dateEl.value ? dateEl.value : null;
+    out[f.id] = {value: val, releaseDate: date};
+  });
+  return out;
+}
+function buildMacroFieldsUI(){
+  const wrap = document.getElementById('macroFields');
+  wrap.innerHTML = '';
+  MACRO_FIELDS.forEach(f=>{
+    const row = document.createElement('div');
+    row.className = 'grid2';
+    row.style.marginBottom = '8px';
+    row.innerHTML = `
+      <div><label class="field-label">${f.label} — مقدار</label><input type="number" class="num-input" id="macro_${f.id}_val" step="any"></div>
+      <div><label class="field-label">${f.label} — تاریخ انتشار</label><input type="date" class="text-input" id="macro_${f.id}_date"></div>
+    `;
+    wrap.appendChild(row);
+  });
+}
+
+function readNumberInput(id){
+  const el = document.getElementById(id);
+  if(!el || el.value === '' || el.value === null) return null;
+  const v = parseFloat(toEnglishDigits(el.value));
+  return isNaN(v) ? null : v;
+}
+
+function buildRecordFromForm(){
+  const now = new Date();
+  const rec = {
+    timestamp: now.toISOString(),
+    source: 'manual',
+    gold18: readNumberInput('gold18_close'),
+    gold18Open: readNumberInput('gold18_open'),
+    gold18High: readNumberInput('gold18_high'),
+    gold18Low: readNumberInput('gold18_low'),
+    gold18Close: readNumberInput('gold18_closeval') ?? readNumberInput('gold18_close'),
+    usd: readNumberInput('usd_close'),
+    usdOpen: readNumberInput('usd_open'),
+    usdHigh: readNumberInput('usd_high'),
+    usdLow: readNumberInput('usd_low'),
+    usdClose: readNumberInput('usd_closeval') ?? readNumberInput('usd_close'),
+    xau: readNumberInput('xau_close'),
+    xauOpen: readNumberInput('xau_open'),
+    xauHigh: readNumberInput('xau_high'),
+    xauLow: readNumberInput('xau_low'),
+    xauClose: readNumberInput('xau_closeval') ?? readNumberInput('xau_close'),
+    meltedGold: readNumberInput('meltedGold'),
+    coinEmami: readNumberInput('coinEmami'),
+    coinBubble: readNumberInput('coinBubble'),
+    dxy: readNumberInput('dxy'),
+    us10y: readNumberInput('us10y'),
+    fedRate: readNumberInput('fedRate'),
+    vix: readNumberInput('vix'),
+    silver: readNumberInput('silver'),
+    oil: readNumberInput('wti'),
+    brent: readNumberInput('brent'),
+  };
+  const macro = collectMacroInputs();
+  Object.keys(macro).forEach(k=>{
+    rec[k] = macro[k].value;
+    rec[k+'_releaseDate'] = macro[k].releaseDate;
+  });
+  return rec;
+}
+
+/* ---------------------- Core math ---------------------- */
+function computeFairValue(xau, usd){
+  if(xau === null || usd === null || xau === undefined || usd === undefined) return null;
+  return (xau * usd * KARAT18_RATIO) / OZ_TO_GRAM;
+}
+function computeGap(gold18, fairValue){
+  if(gold18 === null || fairValue === null || !fairValue) return null;
+  return (gold18 - fairValue) / fairValue;
+}
+function seriesFor(recs, key){ return recs.map(r=>r[key]); }
+
+function returnN(series, idxToday, n){
+  const idxPast = idxToday - n;
+  if(idxPast < 0) return null;
+  const today = series[idxToday], past = series[idxPast];
+  if(today === null || past === null || today === undefined || past === undefined || !past) return null;
+  return (today/past) - 1;
+}
+
+function sma(series, idx, n){
+  if(idx - n + 1 < 0) return null;
+  const slice = series.slice(idx-n+1, idx+1);
+  if(slice.some(v=>v===null||v===undefined||isNaN(v))) return null;
+  return slice.reduce((a,b)=>a+b,0)/n;
+}
+
+function emaSeries(series, n){
+  const alpha = 2/(n+1);
+  const out = new Array(series.length).fill(null);
+  let prev = null;
+  for(let i=0;i<series.length;i++){
+    const v = series[i];
+    if(v===null||v===undefined||isNaN(v)){ out[i]=null; continue; }
+    if(prev===null){ prev = v; }
+    else{ prev = alpha*v + (1-alpha)*prev; }
+    out[i] = prev;
+  }
+  return out;
+}
+
+function logReturns(series){
+  const out = new Array(series.length).fill(null);
+  for(let i=1;i<series.length;i++){
+    const a = series[i], b = series[i-1];
+    if(a===null||b===null||a===undefined||b===undefined||!b||a<=0||b<=0){ out[i]=null; continue; }
+    out[i] = Math.log(a/b);
+  }
+  return out;
+}
+function stdDev(arr){
+  const clean = arr.filter(v=>v!==null && v!==undefined && !isNaN(v));
+  if(clean.length < 2) return null;
+  const mean = clean.reduce((a,b)=>a+b,0)/clean.length;
+  const variance = clean.reduce((a,b)=>a+(b-mean)*(b-mean),0)/(clean.length-1);
+  return Math.sqrt(variance);
+}
+function meanOf(arr){
+  const clean = arr.filter(v=>v!==null && v!==undefined && !isNaN(v));
+  if(!clean.length) return null;
+  return clean.reduce((a,b)=>a+b,0)/clean.length;
+}
+function medianOf(arr){
+  const clean = arr.filter(v=>v!==null && v!==undefined && !isNaN(v)).slice().sort((a,b)=>a-b);
+  if(!clean.length) return null;
+  const mid = Math.floor(clean.length/2);
+  return clean.length % 2 ? clean[mid] : (clean[mid-1]+clean[mid])/2;
+}
+function percentileOf(arr, p){
+  const clean = arr.filter(v=>v!==null && v!==undefined && !isNaN(v)).slice().sort((a,b)=>a-b);
+  if(!clean.length) return null;
+  const idx = (p/100)*(clean.length-1);
+  const lo = Math.floor(idx), hi = Math.ceil(idx);
+  if(lo===hi) return clean[lo];
+  return clean[lo] + (clean[hi]-clean[lo])*(idx-lo);
+}
+function volatilityN(series, idx, n){
+  if(idx - n < 0) return null;
+  const rets = [];
+  for(let i=idx-n+1;i<=idx;i++){
+    const a = series[i], b = series[i-1];
+    if(a===null||b===null||a===undefined||b===undefined||!b||a<=0||b<=0) return null;
+    rets.push(Math.log(a/b));
+  }
+  return stdDev(rets);
+}
+function atr14(recs, idx){
+  const n=14;
+  if(idx-n < 0) return null;
+  const trs = [];
+  for(let i=idx-n+1;i<=idx;i++){
+    const h = recs[i].gold18High, l = recs[i].gold18Low, pc = i>0?(recs[i-1].gold18Close ?? recs[i-1].gold18):null;
+    if(h===null||l===null||h===undefined||l===undefined) return null;
+    let tr;
+    if(pc===null||pc===undefined) tr = h-l;
+    else tr = Math.max(h-l, Math.abs(h-pc), Math.abs(l-pc));
+    trs.push(tr);
+  }
+  return meanOf(trs);
+}
+function pearsonCorrelation(x, y){
+  const pairs = [];
+  for(let i=0;i<x.length;i++){
+    if(x[i]!==null && y[i]!==null && x[i]!==undefined && y[i]!==undefined && !isNaN(x[i]) && !isNaN(y[i])) pairs.push([x[i],y[i]]);
+  }
+  if(pairs.length < 3) return null;
+  const xs = pairs.map(p=>p[0]), ys = pairs.map(p=>p[1]);
+  const mx = meanOf(xs), my = meanOf(ys);
+  let cov=0, vx=0, vy=0;
+  for(let i=0;i<pairs.length;i++){
+    cov += (xs[i]-mx)*(ys[i]-my);
+    vx += (xs[i]-mx)*(xs[i]-mx);
+    vy += (ys[i]-my)*(ys[i]-my);
+  }
+  const denom = Math.sqrt(vx*vy);
+  return denom === 0 ? null : cov/denom;
+}
+
+/* ---------------------- Derived series builder ---------------------- */
+function buildDerived(recs){
+  const gold18 = seriesFor(recs,'gold18');
+  const usd = seriesFor(recs,'usd');
+  const xau = seriesFor(recs,'xau');
+  const fv = recs.map(r=>computeFairValue(r.xau, r.usd));
+  const gap = recs.map((r,i)=>computeGap(r.gold18, fv[i]));
+  const ema9 = emaSeries(gold18,9), ema21 = emaSeries(gold18,21), ema50 = emaSeries(gold18,50);
+  return {gold18, usd, xau, fv, gap, ema9, ema21, ema50};
+}
+
+/* ---------------------- Trend engine ---------------------- */
+function trendLabel(recs, derived, idx){
+  const {gold18, ema9, ema21} = derived;
+  const s20 = sma(gold18, idx, 20), s50 = sma(gold18, idx, 50);
+  const mom7 = returnN(gold18, idx, 7), mom30 = returnN(gold18, idx, 30);
+  const price = gold18[idx];
+  let score = 0, votes = 0;
+  if(price!==null && s20!==null){ votes++; score += price>s20?1:-1; }
+  if(price!==null && s50!==null){ votes++; score += price>s50?1:-1; }
+  if(s20!==null && s50!==null){ votes++; score += s20>s50?1:-1; }
+  if(ema9[idx]!==null && ema21[idx]!==null){ votes++; score += ema9[idx]>ema21[idx]?1:-1; }
+  if(mom7!==null){ votes++; score += mom7>0?1:-1; }
+  if(mom30!==null){ votes++; score += mom30>0?1:-1; }
+  if(votes===0) return {label:'داده کافی نیست', score:null};
+  const norm = score/votes;
+  let label;
+  if(norm >= 0.66) label = 'صعودی قوی';
+  else if(norm >= 0.2) label = 'صعودی';
+  else if(norm > -0.2) label = 'خنثی';
+  else if(norm > -0.66) label = 'نزولی';
+  else label = 'نزولی قوی';
+  return {label, score:norm};
+}
+
+/* ---------------------- Feature vector & pattern matching ---------------------- */
+// Core dims: must exist (bounds how much history is needed for the FIRST usable
+// feature vector to ~20 days, instead of ~50+ if every long-window field were mandatory).
+// Extended dims: nice-to-have when enough history exists; imputed with the
+// population mean (=> neutral z-score contribution) when unavailable, both for
+// candidates and for the target, rather than invalidating the whole vector.
+function featureVectorAt(recs, derived, idx){
+  const {gold18, usd, xau, fv} = derived;
+  const gr7 = returnN(gold18, idx, 7);
+  const ur7 = returnN(usd, idx, 7);
+  const xr7 = returnN(xau, idx, 7);
+  const gap = derived.gap[idx];
+  const s20 = sma(gold18, idx, 20);
+  const distSma20 = (s20 && gold18[idx]!==null) ? (gold18[idx]-s20)/s20 : null;
+  const mom = returnN(gold18, idx, 14);
+  const trend = trendLabel(recs, derived, idx).score;
+  const core = [gr7, ur7, xr7, gap, distSma20, mom, trend];
+  if(core.some(v=>v===null||v===undefined||isNaN(v))) return null;
+
+  const gr30 = returnN(gold18, idx, 30);
+  const ur30 = returnN(usd, idx, 30);
+  const xr30 = returnN(xau, idx, 30);
+  const s50 = sma(gold18, idx, 50);
+  const distSma50 = (s50 && gold18[idx]!==null) ? (gold18[idx]-s50)/s50 : null;
+  const vol30 = volatilityN(gold18, idx, 30);
+  const extended = [gr30, ur30, xr30, distSma50, vol30];
+
+  return {core, extended};
+}
+
+// Combine core (always present) + extended (imputed with column mean when null,
+// across the given population) into one numeric vector for z-scoring/distance.
+function assembleFeatureVectors(targetVec, candidateVecs){
+  const extDims = targetVec.extended.length;
+  const extMeans = [];
+  for(let d=0; d<extDims; d++){
+    const col = candidateVecs.map(v=>v.extended[d]).filter(v=>v!==null && v!==undefined && !isNaN(v));
+    extMeans.push(col.length ? meanOf(col) : 0);
+  }
+  function build(v){
+    const ext = v.extended.map((x,d)=> (x===null||x===undefined||isNaN(x)) ? extMeans[d] : x);
+    return [...v.core, ...ext];
+  }
+  return {targetFull: build(targetVec), candidateFulls: candidateVecs.map(build)};
+}
+
+function findSimilarHistoricalCases(recs, derived, targetIdx, targetPctThreshold){
+  // Build feature vectors for all indices that ALSO have enough future data (7D) to know the outcome,
+  // excluding the target index itself, and excluding indices too close to the end (no future data).
+  const candidates = [];
+  for(let i=0;i<recs.length;i++){
+    if(i===targetIdx) continue;
+    if(i+7 >= recs.length) continue; // need future 7D return
+    const vec = featureVectorAt(recs, derived, i);
+    if(!vec) continue;
+    const futureRet = returnN(derived.gold18, i+7, 7);
+    if(futureRet===null) continue;
+    candidates.push({idx:i, vec, futureRet});
+  }
+  const targetVec = featureVectorAt(recs, derived, targetIdx);
+  if(!targetVec || candidates.length < MIN_PATTERN_SAMPLES_HARD_FLOOR){
+    return {insufficient:true, count: candidates.length, targetVec};
+  }
+  const {targetFull, candidateFulls} = assembleFeatureVectors(targetVec, candidates.map(c=>c.vec));
+  // standardize (z-score) using candidate population stats
+  const dims = targetFull.length;
+  const means = [], stds = [];
+  for(let d=0; d<dims; d++){
+    const col = candidateFulls.map(v=>v[d]);
+    const m = meanOf(col); const sd = stdDev(col) || 1e-9;
+    means.push(m); stds.push(sd);
+  }
+  function zvec(v){ return v.map((x,d)=> (x-means[d])/(stds[d]||1e-9)); }
+  const zTarget = zvec(targetFull);
+  candidates.forEach((c,i)=>{
+    const zc = zvec(candidateFulls[i]);
+    let sumSq=0;
+    for(let d=0; d<dims; d++){ sumSq += (zc[d]-zTarget[d])*(zc[d]-zTarget[d]); }
+    c.dist = Math.sqrt(sumSq);
+  });
+  candidates.sort((a,b)=>a.dist-b.dist);
+  // Nearest K used for the probability/return statistics: the closer 20% of the pool,
+  // but never fewer than the hard floor and never more than the whole pool.
+  // NOTE: `totalPool` (the full candidate count) — not `k` — is what should be checked
+  // against config.minSamples, since k is an intentional subset-size choice, not a
+  // measure of how much historical data actually exists.
+  const k = Math.max(MIN_PATTERN_SAMPLES_HARD_FLOOR, Math.min(candidates.length, Math.round(candidates.length*0.2)));
+  const nearest = candidates.slice(0, k);
+  return {insufficient:false, count:nearest.length, totalPool:candidates.length, cases:nearest};
+}
+
+/* ---------------------- Probability / risk / confidence ---------------------- */
+function computeProbabilities(cases, targetPct){
+  const rets = cases.map(c=>c.futureRet);
+  const n = rets.length;
+  const posCount = rets.filter(r=>r>0).length;
+  const geTargetCount = rets.filter(r=>r>=targetPct/100).length;
+  const ge5Count = rets.filter(r=>r>=0.05).length;
+  const negCount = rets.filter(r=>r<0).length;
+  return {
+    n,
+    probPositive: posCount/n,
+    probGeTarget: geTargetCount/n,
+    probGe5: ge5Count/n,
+    probNegative: negCount/n,
+    rets
+  };
+}
+function computeExpectedReturnStats(rets){
+  return {
+    mean: meanOf(rets),
+    median: medianOf(rets),
+    best: Math.max(...rets),
+    worst: Math.min(...rets),
+    p10: percentileOf(rets,10),
+    p25: percentileOf(rets,25),
+    p75: percentileOf(rets,75),
+    p90: percentileOf(rets,90),
+  };
+}
+function computeMaxDrawdown(series){
+  let peak = -Infinity, maxDD = 0;
+  series.forEach(v=>{
+    if(v===null||v===undefined||isNaN(v)) return;
+    if(v>peak) peak=v;
+    const dd = peak>0 ? (v-peak)/peak : 0;
+    if(dd<maxDD) maxDD=dd;
+  });
+  return maxDD;
+}
+function riskLevel(vol30, atr, worstHist, mdd, probLoss){
+  // combine several normalized signals into a 0-4 risk score
+  let score = 0, votes = 0;
+  if(vol30!==null){ votes++; score += vol30>0.02?2:(vol30>0.01?1:0); }
+  if(worstHist!==null){ votes++; score += worstHist< -0.08?2:(worstHist< -0.04?1:0); }
+  if(mdd!==null){ votes++; score += mdd< -0.15?2:(mdd< -0.07?1:0); }
+  if(probLoss!==null){ votes++; score += probLoss>0.4?2:(probLoss>0.25?1:0); }
+  if(votes===0) return {label:'داده کافی نیست', score:null};
+  const norm = score/(votes*2); // 0..1
+  let label;
+  if(norm < 0.2) label='کم';
+  else if(norm < 0.45) label='متوسط';
+  else if(norm < 0.7) label='زیاد';
+  else label='بسیار زیاد';
+  return {label, score:norm};
+}
+function confidenceLevel(sampleCount, probStability, dataCompleteness){
+  let score=0, votes=0;
+  if(sampleCount!==null){ votes++; score += sampleCount>=150?2:(sampleCount>=50?1:0); }
+  if(probStability!==null){ votes++; score += probStability>0.7?2:(probStability>0.4?1:0); }
+  if(dataCompleteness!==null){ votes++; score += dataCompleteness>=0.9?2:(dataCompleteness>=0.6?1:0); }
+  if(votes===0) return {label:'داده کافی نیست', score:null};
+  const norm = score/(votes*2);
+  let label;
+  if(norm<0.25) label='پایین';
+  else if(norm<0.5) label='متوسط';
+  else if(norm<0.75) label='متوسط/بالا';
+  else label='بالا';
+  return {label, score:norm};
+}
+
+/* ---------------------- Preliminary rule-based signal (fallback only) ----------------------
+   Used ONLY when there are not yet enough historical samples for the statistical
+   pattern-matching engine. This is explicitly NOT a probability and NEVER reported
+   as one — it is a transparent, rule-based read of trend/gap/momentum, clearly
+   labeled "اولیه" (preliminary) everywhere it is shown so it is never confused
+   with the validated statistical decision. */
+function computePreliminarySignal(recs, derived, idx){
+  const gap = derived.gap[idx];
+  const trend = trendLabel(recs, derived, idx);
+  const mom7 = returnN(derived.gold18, idx, 7);
+  const mom30 = returnN(derived.gold18, idx, 30);
+  const reasons = [];
+  let score = 0, votes = 0;
+  if(gap!==null){ votes++; const v = gap<0?1:-1; score+=v; reasons.push({ok:v>0, text:`Gap نسبت به Fair Value: ${fmtPct(gap)}`}); }
+  if(trend.score!==null){ votes++; const v = trend.score>0?1:(trend.score<0?-1:0); score+=v; reasons.push({ok:v>=0, text:`روند: ${trend.label}`}); }
+  if(mom7!==null){ votes++; const v = mom7>0?1:-1; score+=v; reasons.push({ok:v>0, text:`Momentum ۷ روزه: ${fmtPct(mom7)}`}); }
+  if(mom30!==null){ votes++; const v = mom30>0?1:-1; score+=v; reasons.push({ok:v>0, text:`Momentum ۳۰ روزه: ${fmtPct(mom30)}`}); }
+  if(votes===0) return {label:'داده کافی نیست', action:'NO_DATA', reasons:[]};
+  const norm = score/votes;
+  let action;
+  if(norm >= 0.5) action = 'PRELIM_BUY';
+  else if(norm <= -0.5) action = 'PRELIM_NOBUY';
+  else action = 'PRELIM_WAIT';
+  return {action, norm, reasons, votes};
+}
+
+/* ---------------------- Data quality ---------------------- */
+function assessDataQuality(recs){
+  const last = recs[recs.length-1];
+  const q = {};
+  q.gold18 = last && last.gold18!==null;
+  q.usd = last && last.usd!==null;
+  q.xau = last && last.xau!==null;
+  q.historical = recs.length >= config.minSamples;
+  const macroHas = last && MACRO_FIELDS.some(f=>last[f.id]!==null && last[f.id]!==undefined);
+  q.macro = !!macroHas; // optional -> warn only, never blocking
+  const ageHours = last ? (Date.now() - new Date(last.timestamp).getTime())/3600000 : Infinity;
+  q.fresh = ageHours < 72;
+  const requiredOk = q.gold18 && q.usd && q.xau;
+  const completenessScore = [q.gold18,q.usd,q.xau,q.historical,q.fresh].filter(Boolean).length/5;
+  return {...q, requiredOk, completenessScore, ageHours};
+}
+
+/* ---------------------- Backtest (walk-forward) ---------------------- */
+function runBacktest(recs, derived){
+  const n = recs.length;
+  const results = [];
+  const trainEnd = Math.floor(n*0.6);
+  const valEnd = Math.floor(n*0.8);
+  // We only evaluate signals in the TEST segment to avoid look-ahead / overfitting reporting,
+  // but each signal itself only uses data strictly before its own index (walk-forward).
+  for(let i = Math.max(valEnd, config.minSamples+7); i < n-7; i++){
+    const match = findSimilarHistoricalCasesUpTo(recs, derived, i, i);
+    if(match.insufficient) continue;
+    const probs = computeProbabilities(match.cases, config.targetPct);
+    const stats = computeExpectedReturnStats(probs.rets);
+    const decision = decideAction(probs, stats, match.totalPool ?? match.count);
+    const actualRet = returnN(derived.gold18, i+7, 7);
+    if(actualRet===null) continue;
+    results.push({idx:i, decision:decision.action, expected: stats.mean, actual: actualRet});
+  }
+  if(results.length < 5){
+    return {insufficient:true, count: results.length};
+  }
+  const tradeResults = results.filter(r=>r.decision==='BUY');
+  const wins = tradeResults.filter(r=>r.actual>0);
+  const losses = tradeResults.filter(r=>r.actual<=0);
+  const winRate = tradeResults.length ? wins.length/tradeResults.length : null;
+  const avgRet = meanOf(tradeResults.map(r=>r.actual));
+  const medRet = medianOf(tradeResults.map(r=>r.actual));
+  const best = tradeResults.length ? Math.max(...tradeResults.map(r=>r.actual)) : null;
+  const worst = tradeResults.length ? Math.min(...tradeResults.map(r=>r.actual)) : null;
+  const grossWin = wins.reduce((a,r)=>a+r.actual,0);
+  const grossLoss = Math.abs(losses.reduce((a,r)=>a+r.actual,0));
+  const profitFactor = grossLoss>0 ? grossWin/grossLoss : null;
+  const retStd = stdDev(tradeResults.map(r=>r.actual));
+  const sharpe = (retStd && avgRet!==null) ? (avgRet/retStd) : null;
+
+  // Equity curves over the evaluated segment
+  let modelEquity = 1, bhEquity = 1;
+  const modelCurve = [], bhCurve = [];
+  results.forEach(r=>{
+    if(r.decision==='BUY') modelEquity *= (1+r.actual);
+    bhEquity *= (1+r.actual);
+    modelCurve.push(modelEquity);
+    bhCurve.push(bhEquity);
+  });
+  const mdd = computeMaxDrawdown(modelCurve);
+
+  return {
+    insufficient:false,
+    total: tradeResults.length,
+    win: wins.length, lose: losses.length,
+    winRate, avgRet, medRet, best, worst, mdd, profitFactor, sharpe,
+    modelReturn: modelEquity-1, bhReturn: bhEquity-1,
+    modelCurve, bhCurve
+  };
+}
+
+// Variant of pattern matching restricted to data strictly before `asOfIdx` (walk-forward, no leakage)
+function findSimilarHistoricalCasesUpTo(recs, derived, targetIdx, asOfIdx){
+  const candidates = [];
+  for(let i=0;i<asOfIdx;i++){
+    if(i===targetIdx) continue;
+    if(i+7 >= asOfIdx) continue; // future outcome must also be known strictly before asOfIdx
+    const vec = featureVectorAt(recs, derived, i);
+    if(!vec) continue;
+    const futureRet = returnN(derived.gold18, i+7, 7);
+    if(futureRet===null) continue;
+    candidates.push({idx:i, vec, futureRet});
+  }
+  const targetVec = featureVectorAt(recs, derived, targetIdx);
+  if(!targetVec || candidates.length < MIN_PATTERN_SAMPLES_HARD_FLOOR){
+    return {insufficient:true, count: candidates.length};
+  }
+  const {targetFull, candidateFulls} = assembleFeatureVectors(targetVec, candidates.map(c=>c.vec));
+  const dims = targetFull.length;
+  const means=[], stds=[];
+  for(let d=0; d<dims; d++){
+    const col = candidateFulls.map(v=>v[d]);
+    means.push(meanOf(col)); stds.push(stdDev(col)||1e-9);
+  }
+  function zvec(v){ return v.map((x,d)=>(x-means[d])/(stds[d]||1e-9)); }
+  const zTarget = zvec(targetFull);
+  candidates.forEach((c,i)=>{
+    const zc = zvec(candidateFulls[i]);
+    let s=0; for(let d=0; d<dims; d++) s += (zc[d]-zTarget[d])*(zc[d]-zTarget[d]);
+    c.dist = Math.sqrt(s);
+  });
+  candidates.sort((a,b)=>a.dist-b.dist);
+  const k = Math.max(MIN_PATTERN_SAMPLES_HARD_FLOOR, Math.min(candidates.length, Math.round(candidates.length*0.2)));
+  return {insufficient:false, count:k, totalPool:candidates.length, cases: candidates.slice(0,k)};
+}
+
+function decideAction(probs, stats, sampleCount){
+  if(sampleCount < config.minSamples){
+    return {action:'NO_DATA', reason:'داده تاریخی کافی نیست'};
+  }
+  const probPct = probs.probPositive*100;
+  const expPositive = stats.mean !== null && stats.mean > 0;
+  if(probPct >= config.buyProbThreshold && expPositive){
+    return {action:'BUY'};
+  }
+  if(probPct <= config.noBuyProbThreshold || (stats.mean !== null && stats.mean < 0)){
+    return {action:'NO_BUY'};
+  }
+  return {action:'WAIT'};
+}
+
+/* ---------------------- Main analysis pipeline ---------------------- */
+function runFullAnalysis(){
+  if(history.length === 0){
+    renderNoData();
+    return;
+  }
+  const recs = history; // ascending by timestamp
+  const derived = buildDerived(recs);
+  const idx = recs.length - 1;
+  const quality = assessDataQuality(recs);
+
+  renderDataQuality(quality, recs.length);
+
+  if(!quality.requiredOk){
+    renderStopBanner('داده ضروری (طلای ۱۸، دلار یا انس جهانی) ناقص است. تصمیم‌گیری غیرفعال شد.');
+    renderDashboardBasics(recs, derived, idx, quality);
+    clearDecision();
+    return;
+  }
+
+  hideStopBanner();
+  renderDashboardBasics(recs, derived, idx, quality);
+  renderDetails(recs, derived, idx);
+
+  const match = findSimilarHistoricalCases(recs, derived, idx, config.targetPct);
+  if(match.insufficient || (match.totalPool ?? 0) < config.minSamples){
+    renderInsufficientPattern(match.totalPool ?? match.count);
+    const prelim = computePreliminarySignal(recs, derived, idx);
+    renderPreliminaryDecision(prelim, match.totalPool ?? match.count);
+    renderBacktestEmpty();
+    return;
+  }
+
+  const probs = computeProbabilities(match.cases, config.targetPct);
+  const stats = computeExpectedReturnStats(probs.rets);
+  renderPatternResults(match, probs, stats);
+
+  const vol30 = volatilityN(derived.gold18, idx, 30);
+  const atr = atr14(recs, idx);
+  const mdd = computeMaxDrawdown(derived.gold18.slice(Math.max(0,idx-90), idx+1));
+  const risk = riskLevel(vol30, atr, stats.worst, mdd, probs.probNegative);
+  renderRisk(vol30, atr, stats.worst, mdd, probs.probNegative, risk);
+
+  // probability stability: bootstrap-ish quick check by comparing prob computed on nearest 50% vs full K
+  const halfK = Math.max(MIN_PATTERN_SAMPLES_HARD_FLOOR, Math.round(match.cases.length/2));
+  const halfProbs = computeProbabilities(match.cases.slice(0,halfK), config.targetPct);
+  const stability = 1 - Math.abs(halfProbs.probPositive - probs.probPositive);
+  const confidence = confidenceLevel(match.count, stability, quality.completenessScore);
+  renderConfidence(match.count, stability, quality.completenessScore, confidence);
+
+  const decision = decideAction(probs, stats, match.totalPool ?? match.count);
+  renderDecision(decision, probs, stats, risk, confidence);
+  renderExplanation(recs, derived, idx, decision, probs, stats, risk, match);
+
+  const bt = runBacktest(recs, derived);
+  renderBacktest(bt);
+
+  lastAnalysis = {recs, derived, idx, quality, match, probs, stats, risk, confidence, decision, bt};
+}
+
+function renderNoData(){
+  document.getElementById('dataStatusText').textContent = 'داده‌ای ثبت نشده';
+  document.getElementById('dataStatusDot').className = 'dot yellow';
+  document.getElementById('lastUpdateLabel').textContent = '—';
+  renderStopBanner('هنوز هیچ رکوردی ثبت نشده است. از تب «اطلاعات بازار» شروع کنید.');
+  clearDecision();
+  document.getElementById('qualityGrid').innerHTML = '';
+}
+
+function renderStopBanner(msg){
+  const el = document.getElementById('stopBanner');
+  el.textContent = '⚠ تصمیم‌گیری متوقف شد — دلیل: ' + msg;
+  el.classList.remove('hidden');
+}
+function hideStopBanner(){ document.getElementById('stopBanner').classList.add('hidden'); }
+
+function clearDecision(){
+  const badge = document.getElementById('decisionBadge');
+  badge.className = 'decision-badge wait';
+  badge.textContent = '— قابل محاسبه نیست —';
+  document.getElementById('mProb7').textContent = 'N/A';
+  document.getElementById('mExpRet').textContent = 'N/A';
+  document.getElementById('mRisk').textContent = 'N/A';
+  document.getElementById('mConf').textContent = 'N/A';
+}
+
+function renderDashboardBasics(recs, derived, idx, quality){
+  const last = recs[idx];
+  document.getElementById('lastUpdateLabel').textContent = formatPersianDateTime(new Date(last.timestamp));
+  const statusText = document.getElementById('dataStatusText');
+  const statusDot = document.getElementById('dataStatusDot');
+  if(!quality.requiredOk){ statusText.textContent='مدل غیرفعال'; statusDot.className='dot red'; }
+  else if(quality.completenessScore < 0.8){ statusText.textContent='داده ناقص'; statusDot.className='dot yellow'; }
+  else { statusText.textContent='داده کامل'; statusDot.className='dot green'; }
+
+  document.getElementById('dGold18').textContent = fmtNum(last.gold18) + ' تومان';
+  const fv = derived.fv[idx];
+  document.getElementById('dFairValue').textContent = fv!==null ? fmtNum(fv)+' تومان' : 'N/A';
+  const gap = derived.gap[idx];
+  const gapEl = document.getElementById('dGap');
+  gapEl.textContent = gap!==null ? fmtPct(gap) : 'N/A';
+  gapEl.className = 'value ' + (gap===null?'neutral':(gap>0?'neg':'pos'));
+  const trend = trendLabel(recs, derived, idx);
+  document.getElementById('dTrend').textContent = trend.label;
+}
+
+function renderDetails(recs, derived, idx){
+  const {gold18, usd, xau, fv} = derived;
+  document.getElementById('s_sma5').textContent = fmtVal(sma(gold18,idx,5));
+  document.getElementById('s_sma10').textContent = fmtVal(sma(gold18,idx,10));
+  document.getElementById('s_sma20').textContent = fmtVal(sma(gold18,idx,20));
+  document.getElementById('s_sma50').textContent = fmtVal(sma(gold18,idx,50));
+  document.getElementById('s_sma100').textContent = fmtVal(sma(gold18,idx,100));
+  document.getElementById('s_sma200').textContent = fmtVal(sma(gold18,idx,200));
+  document.getElementById('s_ema9').textContent = fmtVal(derived.ema9[idx]);
+  document.getElementById('s_ema21').textContent = fmtVal(derived.ema21[idx]);
+  document.getElementById('s_ema50').textContent = fmtVal(derived.ema50[idx]);
+  const s20 = sma(gold18,idx,20), s50 = sma(gold18,idx,50);
+  document.getElementById('s_distSma20').textContent = (s20 && gold18[idx]!==null) ? fmtPct((gold18[idx]-s20)/s20) : 'Insufficient Data';
+  document.getElementById('s_distSma50').textContent = (s50 && gold18[idx]!==null) ? fmtPct((gold18[idx]-s50)/s50) : 'Insufficient Data';
+  document.getElementById('s_atr14').textContent = fmtVal(atr14(recs, idx));
+
+  // returns table
+  const periods = [1,3,7,14,30,60,90];
+  const tbody = document.getElementById('returnsTableBody');
+  tbody.innerHTML = '';
+  periods.forEach(p=>{
+    const g = returnN(gold18, idx, p);
+    const u = returnN(usd, idx, p);
+    const x = returnN(xau, idx, p);
+    const f = returnN(fv, idx, p);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${toPersianDigits(p)}D</td><td>${g!==null?fmtPct(g):'—'}</td><td>${u!==null?fmtPct(u):'—'}</td><td>${x!==null?fmtPct(x):'—'}</td><td>${f!==null?fmtPct(f):'—'}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  // volatility grid
+  const volPeriods = [7,14,30,60];
+  const volGrid = document.getElementById('volGrid');
+  volGrid.innerHTML = '';
+  volPeriods.forEach(p=>{
+    const v = volatilityN(gold18, idx, p);
+    const box = document.createElement('div');
+    box.className = 'metric-box';
+    box.innerHTML = `<div class="label">Volatility ${toPersianDigits(p)}D</div><div class="value">${v!==null?fmtPct(v,2):'Insufficient Data'}</div>`;
+    volGrid.appendChild(box);
+  });
+
+  // correlation table
+  const corrWindows = [30,60,90];
+  const corrBody = document.getElementById('corrTableBody');
+  corrBody.innerHTML = '';
+  corrWindows.forEach(w=>{
+    const from = Math.max(0, idx-w+1);
+    const gSlice = gold18.slice(from, idx+1);
+    const uSlice = usd.slice(from, idx+1);
+    const xSlice = xau.slice(from, idx+1);
+    const fSlice = fv.slice(from, idx+1);
+    const cU = pearsonCorrelation(gSlice, uSlice);
+    const cX = pearsonCorrelation(gSlice, xSlice);
+    const cF = pearsonCorrelation(gSlice, fSlice);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${toPersianDigits(w)}D</td><td>${cU!==null?toPersianDigits(cU.toFixed(2)):'N/A'}</td><td>${cX!==null?toPersianDigits(cX.toFixed(2)):'N/A'}</td><td>${cF!==null?toPersianDigits(cF.toFixed(2)):'N/A'}</td>`;
+    corrBody.appendChild(tr);
+  });
+
+  renderCharts(recs, derived, idx);
+}
+function fmtVal(v){ return v===null||v===undefined||isNaN(v) ? 'Insufficient Data' : fmtNum(v); }
+
+function renderInsufficientPattern(count){
+  document.getElementById('p_sampleCount').textContent = toPersianDigits(count) + ` (حداقل لازم: ${toPersianDigits(config.minSamples)})`;
+  ['p_prob7','p_probGe2','p_probGe5','p_probNeg','p_mean','p_median','p_best','p_worst','p_pctl'].forEach(id=>{
+    document.getElementById(id).textContent = 'داده تاریخی کافی نیست';
+  });
+  document.getElementById('p_note').textContent = `برای تولید احتمال معتبر حداقل ${toPersianDigits(config.minSamples)} نمونه تاریخی مورد نیاز است.`;
+  ['r_vol30','r_atr','r_worstHist','r_mdd','r_probLoss','r_final','c_sample','c_stab','c_completeness','c_final'].forEach(id=>{
+    document.getElementById(id).textContent = 'داده کافی نیست';
+  });
+  const explainList = document.getElementById('explainList');
+  explainList.innerHTML = `<li class="warn"><span class="warnsign">⚠</span> نمونه‌های تاریخی مشابه کافی برای محاسبه احتمال معتبر یافت نشد (${toPersianDigits(count)} نمونه). با ثبت داده‌های بیشتر در طول زمان، این بخش فعال خواهد شد.</li>`;
+}
+
+function renderPatternResults(match, probs, stats){
+  document.getElementById('p_sampleCount').textContent = toPersianDigits(match.count);
+  document.getElementById('p_prob7').textContent = fmtPct(probs.probPositive);
+  document.getElementById('p_probGe2').textContent = fmtPct(probs.probGeTarget);
+  document.getElementById('p_probGe5').textContent = fmtPct(probs.probGe5);
+  document.getElementById('p_probNeg').textContent = fmtPct(probs.probNegative);
+  document.getElementById('p_mean').textContent = fmtPct(stats.mean);
+  document.getElementById('p_median').textContent = fmtPct(stats.median);
+  document.getElementById('p_best').textContent = fmtPct(stats.best);
+  document.getElementById('p_worst').textContent = fmtPct(stats.worst);
+  document.getElementById('p_pctl').textContent = `${fmtPct(stats.p10)} / ${fmtPct(stats.p25)} / ${fmtPct(stats.p75)} / ${fmtPct(stats.p90)}`;
+  document.getElementById('p_note').textContent = '';
+}
+
+function renderRisk(vol30, atr, worstHist, mdd, probLoss, risk){
+  document.getElementById('r_vol30').textContent = vol30!==null?fmtPct(vol30,2):'Insufficient Data';
+  document.getElementById('r_atr').textContent = atr!==null?fmtNum(atr):'Insufficient Data';
+  document.getElementById('r_worstHist').textContent = worstHist!==null?fmtPct(worstHist):'Insufficient Data';
+  document.getElementById('r_mdd').textContent = mdd!==null?fmtPct(mdd):'Insufficient Data';
+  document.getElementById('r_probLoss').textContent = probLoss!==null?fmtPct(probLoss):'Insufficient Data';
+  document.getElementById('r_final').textContent = risk.label;
+}
+function renderConfidence(sampleCount, stability, completeness, confidence){
+  document.getElementById('c_sample').textContent = toPersianDigits(sampleCount);
+  document.getElementById('c_stab').textContent = fmtPct(stability,0);
+  document.getElementById('c_completeness').textContent = fmtPct(completeness,0);
+  document.getElementById('c_final').textContent = confidence.label;
+}
+
+function renderPreliminaryDecision(prelim, sampleCount){
+  const badge = document.getElementById('decisionBadge');
+  const map = {
+    PRELIM_BUY:   {cls:'buy',  text:'🟢 تمایل اولیه به رشد (Preliminary)'},
+    PRELIM_WAIT:  {cls:'wait', text:'🟡 نامشخص (Preliminary)'},
+    PRELIM_NOBUY: {cls:'nobuy',text:'🔴 تمایل اولیه به افت (Preliminary)'},
+    NO_DATA:      {cls:'wait', text:'⚪ داده ناکافی'}
+  };
+  const d = map[prelim.action] || map.NO_DATA;
+  badge.className = 'decision-badge ' + d.cls;
+  badge.textContent = d.text;
+
+  document.getElementById('mProb7').textContent = 'نامعتبر';
+  document.getElementById('mExpRet').textContent = 'نامعتبر';
+  document.getElementById('mRisk').textContent = 'نامعتبر';
+  document.getElementById('mConf').textContent = 'پایین (اولیه)';
+
+  const list = document.getElementById('explainList');
+  list.innerHTML = '';
+  const note = document.createElement('li');
+  note.className = 'warn';
+  note.innerHTML = `<span class="warnsign">⚠</span> <span><b>این یک سیگنال اولیه و صرفاً قاعده‌محور است، نه یک احتمال آماری معتبر.</b> برای فعال‌شدن تحلیل آماری کامل (احتمال، بازده مورد انتظار، ریسک، Backtest) حداقل ${toPersianDigits(config.minSamples)} نمونه تاریخی لازم است — اکنون ${toPersianDigits(sampleCount)} نمونه در دسترس است. از تب «اطلاعات بازار» می‌توانید تاریخچه را به‌صورت گروهی بارگذاری کنید.</span>`;
+  list.appendChild(note);
+  if(prelim.reasons && prelim.reasons.length){
+    prelim.reasons.forEach(r=>{
+      const li = document.createElement('li');
+      li.innerHTML = `<span class="${r.ok?'tick':'warnsign'}">${r.ok?'✓':'✕'}</span> <span>${r.text}</span>`;
+      list.appendChild(li);
+    });
+  }
+}
+
+function renderDecision(decision, probs, stats, risk, confidence){
+  const badge = document.getElementById('decisionBadge');
+  const map = {
+    BUY: {cls:'buy', text:'🟢 BUY'},
+    WAIT: {cls:'wait', text:'🟡 WAIT'},
+    NO_BUY: {cls:'nobuy', text:'🔴 NO BUY'},
+    NO_DATA: {cls:'wait', text:'⚪ داده ناکافی'}
+  };
+  const d = map[decision.action] || map.NO_DATA;
+  badge.className = 'decision-badge ' + d.cls;
+  badge.textContent = d.text;
+
+  document.getElementById('mProb7').textContent = fmtPct(probs.probPositive);
+  document.getElementById('mExpRet').textContent = fmtPct(stats.mean);
+  document.getElementById('mRisk').textContent = risk.label;
+  document.getElementById('mConf').textContent = confidence.label;
+}
+
+function renderExplanation(recs, derived, idx, decision, probs, stats, risk, match){
+  const list = document.getElementById('explainList');
+  list.innerHTML = '';
+  const usdRet7 = returnN(derived.usd, idx, 7);
+  const xauRet7 = returnN(derived.xau, idx, 7);
+  const gap = derived.gap[idx];
+  const trend = trendLabel(recs, derived, idx);
+  const mom7 = returnN(derived.gold18, idx, 7);
+  const s20 = sma(derived.gold18, idx, 20);
+  const price = derived.gold18[idx];
+
+  const points = [];
+  if(usdRet7!==null) points.push({ok: decision.action==='BUY', text:`دلار ۷ روزه ${fmtPct(usdRet7)}`});
+  if(xauRet7!==null) points.push({ok: decision.action==='BUY', text:`انس ۷ روزه ${fmtPct(xauRet7)}`});
+  if(gap!==null) points.push({ok: gap<0, text: gap<0 ? `قیمت ${fmtPct(Math.abs(gap))} پایین‌تر از Fair Value` : `قیمت ${fmtPct(gap)} بالاتر از Fair Value`});
+  if(mom7!==null) points.push({ok: mom7>0, text:`Momentum ۷ روزه ${mom7>0?'مثبت':'منفی'} (${fmtPct(mom7)})`});
+  if(s20!==null && price!==null) points.push({ok: price>s20, text:`قیمت ${price>s20?'بالاتر':'پایین‌تر'} از SMA20`});
+  points.push({ok:true, text:`${toPersianDigits(match.count)} نمونه تاریخی مشابه یافت شد`});
+  points.push({ok: probs.probPositive>0.5, text:`${fmtPct(probs.probPositive)} از نمونه‌های مشابه، رشد ۷ روزه داشته‌اند`});
+
+  points.forEach(p=>{
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="${p.ok?'tick':'warnsign'}">${p.ok?'✓':'✕'}</span> <span>${p.text}</span>`;
+    list.appendChild(li);
+  });
+
+  if(risk.label==='زیاد' || risk.label==='بسیار زیاد'){
+    const warnLi = document.createElement('li');
+    warnLi.className = 'warn';
+    warnLi.innerHTML = `<span class="warnsign">⚠</span> <span>سطح ریسک ${risk.label} است — نوسان یا افت‌های تاریخی بیشتر از حد معمول.</span>`;
+    list.appendChild(warnLi);
+  }
+  if(decision.action==='NO_DATA'){
+    const li = document.createElement('li');
+    li.className='warn';
+    li.innerHTML = `<span class="warnsign">⚠</span><span>${decision.reason}</span>`;
+    list.appendChild(li);
+  }
+}
+
+function renderDataQuality(quality, count){
+  const grid = document.getElementById('qualityGrid');
+  const rows = [
+    ['طلای ۱۸', quality.gold18],
+    ['دلار', quality.usd],
+    ['انس جهانی', quality.xau],
+    ['تاریخچه کافی', quality.historical],
+    ['داده تازه (کمتر از ۷۲ساعت)', quality.fresh],
+    ['اقتصاد کلان (اختیاری)', quality.macro]
+  ];
+  grid.innerHTML = '';
+  rows.forEach(([label, ok])=>{
+    const div = document.createElement('div');
+    div.className = 'quality-row';
+    const isOptionalMacro = label.includes('اختیاری');
+    const cls = ok ? 'qok' : (isOptionalMacro ? 'qwarn' : 'qbad');
+    const symbol = ok ? '✓' : (isOptionalMacro ? '⚠' : '✕');
+    div.innerHTML = `<span>${label}</span><span class="${cls}">${symbol}</span>`;
+    grid.appendChild(div);
+  });
+}
+
+function renderBacktestEmpty(){
+  document.getElementById('backtestResults').classList.add('hidden');
+  const empty = document.getElementById('backtestEmptyMsg');
+  empty.textContent = 'مدل هنوز اعتبارسنجی نشده است — داده تاریخی کافی برای اجرای Backtest معتبر (Walk-Forward) وجود ندارد.';
+  empty.classList.remove('hidden');
+}
+function renderBacktest(bt){
+  if(bt.insufficient){ renderBacktestEmpty(); return; }
+  document.getElementById('backtestEmptyMsg').classList.add('hidden');
+  document.getElementById('backtestResults').classList.remove('hidden');
+  document.getElementById('bt_total').textContent = toPersianDigits(bt.total);
+  document.getElementById('bt_winrate').textContent = bt.winRate!==null?fmtPct(bt.winRate,0):'N/A';
+  document.getElementById('bt_win').textContent = toPersianDigits(bt.win);
+  document.getElementById('bt_lose').textContent = toPersianDigits(bt.lose);
+  document.getElementById('bt_avg').textContent = bt.avgRet!==null?fmtPct(bt.avgRet):'N/A';
+  document.getElementById('bt_median').textContent = bt.medRet!==null?fmtPct(bt.medRet):'N/A';
+  document.getElementById('bt_best').textContent = bt.best!==null?fmtPct(bt.best):'N/A';
+  document.getElementById('bt_worst').textContent = bt.worst!==null?fmtPct(bt.worst):'N/A';
+  document.getElementById('bt_mdd').textContent = bt.mdd!==null?fmtPct(bt.mdd):'N/A';
+  document.getElementById('bt_pf').textContent = bt.profitFactor!==null?toPersianDigits(bt.profitFactor.toFixed(2)):'N/A';
+  document.getElementById('bt_sharpe').textContent = bt.sharpe!==null?toPersianDigits(bt.sharpe.toFixed(2)):'N/A';
+  document.getElementById('bt_status').textContent = bt.total >= 10 ? 'اعتبارسنجی شده (نمونه محدود)' : 'نمونه ناکافی برای نتیجه‌گیری قطعی';
+  document.getElementById('bt_modelReturn').textContent = fmtPct(bt.modelReturn);
+  document.getElementById('bt_bhReturn').textContent = fmtPct(bt.bhReturn);
+  renderEquityChart(bt);
+}
+
+/* ---------------------- Charts (Chart.js with manual-canvas fallback) ---------------------- */
+function safeChart(ctxId, config){
+  try{
+    if(charts[ctxId]) { charts[ctxId].destroy(); }
+    if(typeof Chart === 'undefined'){
+      drawFallbackLine(ctxId, config);
+      return;
+    }
+    const ctx = document.getElementById(ctxId).getContext('2d');
+    charts[ctxId] = new Chart(ctx, config);
+  }catch(e){
+    console.error('Chart render failed for', ctxId, e);
+  }
+}
+function drawFallbackLine(ctxId, config){
+  // minimal manual canvas line chart if Chart.js CDN failed to load
+  const canvas = document.getElementById(ctxId);
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width = canvas.clientWidth || 300;
+  const h = canvas.height = canvas.clientHeight || 200;
+  ctx.clearRect(0,0,w,h);
+  const datasets = config.data.datasets;
+  if(!datasets || !datasets.length) return;
+  const allVals = datasets.flatMap(d=>d.data.filter(v=>v!==null && v!==undefined));
+  if(!allVals.length) return;
+  const min = Math.min(...allVals), max = Math.max(...allVals);
+  const colors = ['#C9A227','#8A6A16','#168A45','#C93636'];
+  datasets.forEach((ds,di)=>{
+    ctx.beginPath();
+    ds.data.forEach((v,i)=>{
+      if(v===null||v===undefined) return;
+      const x = (i/(ds.data.length-1||1))*w;
+      const y = h - ((v-min)/((max-min)||1))*h;
+      if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle = colors[di%colors.length];
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+}
+
+function renderCharts(recs, derived, idx){
+  const labels = recs.map(r=>formatPersianDateTime(new Date(r.timestamp)));
+  const s20series = derived.gold18.map((_,i)=>sma(derived.gold18,i,20));
+  const s50series = derived.gold18.map((_,i)=>sma(derived.gold18,i,50));
+  safeChart('chartPrice', {
+    type:'line',
+    data:{labels, datasets:[
+      {label:'قیمت طلای ۱۸', data:derived.gold18, borderColor:'#C9A227', tension:.25, pointRadius:0},
+      {label:'SMA20', data:s20series, borderColor:'#8A6A16', tension:.25, pointRadius:0},
+      {label:'SMA50', data:s50series, borderColor:'#7A7A76', tension:.25, pointRadius:0},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{labels:{font:{family:'Vazirmatn'}}}}}
+  });
+  safeChart('chartFV', {
+    type:'line',
+    data:{labels, datasets:[
+      {label:'قیمت بازار', data:derived.gold18, borderColor:'#C9A227', tension:.25, pointRadius:0},
+      {label:'Fair Value', data:derived.fv, borderColor:'#168A45', tension:.25, pointRadius:0},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false}
+  });
+  safeChart('chartUsdXau', {
+    type:'line',
+    data:{labels, datasets:[
+      {label:'دلار', data:derived.usd, borderColor:'#D9822B', tension:.25, pointRadius:0, yAxisID:'y'},
+      {label:'انس جهانی', data:derived.xau, borderColor:'#C93636', tension:.25, pointRadius:0, yAxisID:'y1'},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false,
+      scales:{ y:{position:'left'}, y1:{position:'right', grid:{drawOnChartArea:false}} }}
+  });
+}
+function renderEquityChart(bt){
+  if(bt.insufficient) return;
+  const labels = bt.modelCurve.map((_,i)=>i+1);
+  safeChart('chartEquity', {
+    type:'line',
+    data:{labels, datasets:[
+      {label:'Model Equity', data:bt.modelCurve, borderColor:'#C9A227', tension:.15, pointRadius:0},
+      {label:'Buy & Hold Equity', data:bt.bhCurve, borderColor:'#7A7A76', tension:.15, pointRadius:0},
+    ]},
+    options:{responsive:true, maintainAspectRatio:false}
+  });
+}
+
+/* ---------------------- History table & CRUD ---------------------- */
+function renderHistoryTable(){
+  document.getElementById('histCount').textContent = toPersianDigits(history.length);
+  const tbody = document.getElementById('historyTableBody');
+  tbody.innerHTML = '';
+  const derived = history.length ? buildDerived(history) : null;
+  history.slice().reverse().forEach((r, revIdx)=>{
+    const i = history.length-1-revIdx;
+    const fv = derived ? derived.fv[i] : null;
+    const gap = derived ? derived.gap[i] : null;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${formatPersianDateTime(new Date(r.timestamp))}</td>
+      <td>${fmtNum(r.gold18)}</td>
+      <td>${fmtNum(r.usd)}</td>
+      <td>${fmtNum(r.xau)}</td>
+      <td>${fv!==null?fmtNum(fv):'N/A'}</td>
+      <td>${gap!==null?fmtPct(gap):'N/A'}</td>
+      <td>${r.source==='demo'?'DEMO':'دستی'}</td>
+      <td><button class="btn-secondary" data-del="${i}" style="padding:4px 8px;font-size:11px;border-color:var(--red);color:var(--red);">حذف</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  tbody.querySelectorAll('[data-del]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = parseInt(btn.getAttribute('data-del'));
+      if(confirm('این رکورد حذف شود؟')){
+        history.splice(idx,1);
+        saveHistory();
+        renderHistoryTable();
+        runFullAnalysis();
+      }
+    });
+  });
+}
+
+/* ---------------------- CSV Import / Export ---------------------- */
+const CSV_FIELDS = ['timestamp','source','gold18','gold18Open','gold18High','gold18Low','gold18Close',
+  'usd','usdOpen','usdHigh','usdLow','usdClose','xau','xauOpen','xauHigh','xauLow','xauClose',
+  'meltedGold','coinEmami','coinBubble','dxy','us10y','fedRate','vix','silver','oil','brent',
+  ...MACRO_FIELDS.flatMap(f=>[f.id, f.id+'_releaseDate'])];
+
+function exportCSV(){
+  if(!history.length){ alert('تاریخچه‌ای برای خروجی گرفتن وجود ندارد.'); return; }
+  const rows = [CSV_FIELDS.join(',')];
+  history.forEach(r=>{
+    const row = CSV_FIELDS.map(f=>{
+      const v = r[f];
+      if(v===null||v===undefined) return '';
+      return String(v).replace(/,/g,';');
+    });
+    rows.push(row.join(','));
+  });
+  const blob = new Blob([rows.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'gold_decision_engine_history.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importCSV(file){
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    try{
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).filter(l=>l.trim().length);
+      if(!lines.length) throw new Error('فایل خالی است');
+      const header = lines[0].split(',');
+      const imported = [];
+      for(let i=1;i<lines.length;i++){
+        const cols = lines[i].split(',');
+        const rec = {};
+        header.forEach((h,idx)=>{
+          const raw = cols[idx];
+          if(raw===undefined || raw==='') { rec[h] = (h==='timestamp'||h==='source'||h.endsWith('_releaseDate')) ? (raw||null) : null; return; }
+          if(h==='timestamp' || h==='source' || h.endsWith('_releaseDate')) rec[h]=raw;
+          else { const n = parseFloat(raw); rec[h] = isNaN(n)?null:n; }
+        });
+        if(rec.timestamp) imported.push(rec);
+      }
+      if(!imported.length) throw new Error('هیچ رکورد معتبری یافت نشد');
+      history = imported.sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+      saveHistory();
+      renderHistoryTable();
+      runFullAnalysis();
+      alert(`${toPersianDigits(imported.length)} رکورد با موفقیت بارگذاری شد.`);
+    }catch(err){
+      console.error(err);
+      alert('خطا در خواندن فایل CSV: ' + err.message);
+    }
+  };
+  reader.onerror = ()=> alert('خواندن فایل با خطا مواجه شد.');
+  reader.readAsText(file, 'utf-8');
+}
+
+/* ---------------------- Bulk paste loader ---------------------- */
+function parseBulkPasteText(text){
+  const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length);
+  const records = [];
+  const errors = [];
+  lines.forEach((line, i)=>{
+    const parts = line.split(',').map(p=>toEnglishDigits(p.trim()));
+    if(parts.length < 4){ errors.push(`خط ${i+1}: تعداد ستون‌ها ناکافی است`); return; }
+    const dateStr = parts[0].replace(/\//g,'-');
+    const d = new Date(dateStr + 'T12:00:00');
+    if(isNaN(d.getTime())){ errors.push(`خط ${i+1}: تاریخ نامعتبر (${parts[0]})`); return; }
+    const gold18 = parseFloat(parts[1]);
+    const usd = parseFloat(parts[2]);
+    const xau = parseFloat(parts[3]);
+    if(isNaN(gold18) || isNaN(usd) || isNaN(xau)){ errors.push(`خط ${i+1}: مقدار عددی نامعتبر`); return; }
+    // optional extended columns: gold18Open,High,Low, usdOpen,High,Low, xauOpen,High,Low
+    const rec = {
+      timestamp: d.toISOString(), source: 'bulk',
+      gold18, gold18Open: parts[4]?parseFloat(parts[4]):gold18, gold18High: parts[5]?parseFloat(parts[5]):gold18, gold18Low: parts[6]?parseFloat(parts[6]):gold18, gold18Close: gold18,
+      usd, usdOpen: usd, usdHigh: usd, usdLow: usd, usdClose: usd,
+      xau, xauOpen: xau, xauHigh: xau, xauLow: xau, xauClose: xau,
+      meltedGold:null, coinEmami:null, coinBubble:null,
+      dxy:null, us10y:null, fedRate:null, vix:null, silver:null, oil:null, brent:null,
+    };
+    records.push(rec);
+  });
+  return {records, errors};
+}
+
+/* ---------------------- Demo data (clearly labeled, never shown as real) ---------------------- */
+function generateDemoData(){
+  // DEMO DATA — synthetic, for illustrating the UI only. Never used as a real market signal.
+  const out = [];
+  let gold18 = 6800000, usd = 68000, xau = 2350;
+  const start = new Date();
+  start.setDate(start.getDate() - 220);
+  for(let i=0;i<220;i++){
+    const d = new Date(start); d.setDate(start.getDate()+i);
+    // simple pseudo-random walk, seeded off index for reproducibility
+    const rnd = (Math.sin(i*12.9898)*43758.5453) % 1;
+    const drift = 0.0006 + rnd*0.004 - 0.002;
+    gold18 = Math.max(1000, gold18*(1+drift));
+    usd = Math.max(1000, usd*(1+drift*0.6 + (rnd-0.5)*0.003));
+    xau = Math.max(100, xau*(1+drift*0.4 + (rnd-0.5)*0.004));
+    out.push({
+      timestamp: d.toISOString(), source:'demo',
+      gold18: Math.round(gold18), gold18Open: Math.round(gold18*0.998), gold18High: Math.round(gold18*1.006), gold18Low: Math.round(gold18*0.994), gold18Close: Math.round(gold18),
+      usd: Math.round(usd), usdOpen: Math.round(usd*0.998), usdHigh: Math.round(usd*1.004), usdLow: Math.round(usd*0.996), usdClose: Math.round(usd),
+      xau: Math.round(xau*100)/100, xauOpen: Math.round(xau*0.997*100)/100, xauHigh: Math.round(xau*1.005*100)/100, xauLow: Math.round(xau*0.995*100)/100, xauClose: Math.round(xau*100)/100,
+      meltedGold: Math.round(gold18*0.96), coinEmami: Math.round(gold18*8.5), coinBubble: Math.round(gold18*0.3),
+      dxy: null, us10y: null, fedRate: null, vix: null, silver: null, oil: null, brent: null,
+    });
+  }
+  return out;
+}
+
+/* ---------------------- UI wiring ---------------------- */
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  ['dashboard','input','details','backtest','history'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('hidden', t!==tab);
+  });
+  if(tab==='details' && lastAnalysis) renderCharts(lastAnalysis.recs, lastAnalysis.derived, lastAnalysis.idx);
+  if(tab==='backtest' && lastAnalysis && lastAnalysis.bt) renderEquityChart(lastAnalysis.bt);
+}
+
+function setMode(mode){
+  currentMode = mode;
+  document.getElementById('modeQuickBtn').classList.toggle('active', mode==='quick');
+  document.getElementById('modeProBtn').classList.toggle('active', mode==='pro');
+  document.getElementById('proInputBlock').classList.toggle('hidden', mode!=='pro');
+}
+
+function initUI(){
+  buildMacroFieldsUI();
+  document.querySelectorAll('.tab-btn').forEach(b=> b.addEventListener('click', ()=>switchTab(b.dataset.tab)));
+  document.getElementById('modeQuickBtn').addEventListener('click', ()=>setMode('quick'));
+  document.getElementById('modeProBtn').addEventListener('click', ()=>setMode('pro'));
+
+  document.getElementById('calcBtn').addEventListener('click', ()=>{
+    const rec = buildRecordFromForm();
+    if(rec.gold18===null || rec.usd===null || rec.xau===null){
+      if(!confirm('یکی از داده‌های ضروری (طلای ۱۸ / دلار / انس) خالی است. رکورد ناقص ثبت شود؟ (تصمیم‌گیری تا تکمیل داده غیرفعال می‌ماند)')) return;
+    }
+    history.push(rec);
+    history.sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+    saveHistory();
+    renderHistoryTable();
+    runFullAnalysis();
+    switchTab('dashboard');
+  });
+
+  document.getElementById('bulkLoadBtn').addEventListener('click', ()=>{
+    const text = document.getElementById('bulkPasteArea').value;
+    const statusEl = document.getElementById('bulkLoadStatus');
+    if(!text.trim()){ statusEl.textContent = 'ابتدا داده‌ای جای‌گذاری کنید.'; statusEl.className='small-muted'; return; }
+    const {records, errors} = parseBulkPasteText(text);
+    if(records.length){
+      history = history.concat(records).sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+      // de-duplicate exact same-day timestamps from bulk (keep last)
+      const seen = new Map();
+      history.forEach(r=>{ seen.set(r.timestamp.slice(0,10)+'_'+r.source, r); });
+      saveHistory();
+      renderHistoryTable();
+      runFullAnalysis();
+    }
+    let msg = `${toPersianDigits(records.length)} رکورد اضافه شد.`;
+    if(errors.length) msg += ` (${toPersianDigits(errors.length)} خط با خطا رد شد: ${errors.slice(0,3).join(' | ')}${errors.length>3?' ...':''})`;
+    statusEl.textContent = msg;
+    statusEl.style.color = errors.length ? 'var(--orange)' : 'var(--green)';
+    if(records.length) document.getElementById('bulkPasteArea').value = '';
+    switchTab('dashboard');
+  });
+  document.getElementById('loadDemoBtnInput').addEventListener('click', ()=> document.getElementById('loadDemoBtn').click());
+
+  document.getElementById('exportBtn').addEventListener('click', exportCSV);
+  document.getElementById('importBtnTrigger').addEventListener('click', ()=> document.getElementById('importFileInput').click());
+  document.getElementById('importFileInput').addEventListener('change', (e)=>{
+    if(e.target.files && e.target.files[0]) importCSV(e.target.files[0]);
+    e.target.value = '';
+  });
+  document.getElementById('loadDemoBtn').addEventListener('click', ()=>{
+    if(!confirm('داده نمایشی (DEMO) جایگزین... در واقع اضافه به تاریخچه فعلی می‌شود تا امکانات نرم‌افزار قابل مشاهده باشد. این داده کاملاً ساختگی است و نباید به‌عنوان قیمت واقعی بازار استفاده شود. ادامه می‌دهید؟')) return;
+    const demo = generateDemoData();
+    history = history.concat(demo).sort((a,b)=> new Date(a.timestamp) - new Date(b.timestamp));
+    saveHistory();
+    renderHistoryTable();
+    runFullAnalysis();
+    switchTab('dashboard');
+  });
+  document.getElementById('clearHistoryBtn').addEventListener('click', ()=>{
+    if(confirm('کل تاریخچه برای همیشه پاک شود؟ این عمل قابل بازگشت نیست.')){
+      history = [];
+      saveHistory();
+      renderHistoryTable();
+      runFullAnalysis();
+    }
+  });
+
+  document.getElementById('recalcCfgBtn').addEventListener('click', ()=>{
+    config.minSamples = Math.max(MIN_PATTERN_SAMPLES_HARD_FLOOR, parseInt(document.getElementById('cfgMinSamples').value)||30);
+    config.targetPct = parseFloat(document.getElementById('cfgTargetPct').value)||2;
+    config.buyProbThreshold = parseFloat(document.getElementById('cfgBuyProb').value)||65;
+    config.noBuyProbThreshold = parseFloat(document.getElementById('cfgNoBuyProb').value)||40;
+    saveConfig();
+    runFullAnalysis();
+  });
+}
+
+function applyConfigToInputs(){
+  document.getElementById('cfgMinSamples').value = config.minSamples;
+  document.getElementById('cfgTargetPct').value = config.targetPct;
+  document.getElementById('cfgBuyProb').value = config.buyProbThreshold;
+  document.getElementById('cfgNoBuyProb').value = config.noBuyProbThreshold;
+}
+
+/* ---------------------- Boot ---------------------- */
+(function boot(){
+  loadState();
+  initUI();
+  applyConfigToInputs();
+  renderHistoryTable();
+  runFullAnalysis();
+})();
+</script>
+</body>
+</html>
